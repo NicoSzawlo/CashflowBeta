@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace CashflowBeta.Models
 {
-    public class Asset
+    public class Budget
     {
-
         public int ID { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
         public decimal Amount { get; set; }
-        public string AssetIdentifier { get; set; }
-        public virtual Account Account { get; set; }
-        public virtual ICollection<AssetTransaction> AssetTransactions { get; set; }
-
+        public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

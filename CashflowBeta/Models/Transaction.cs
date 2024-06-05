@@ -17,5 +17,6 @@ namespace CashflowBeta.Models
         public string Reference { get; set; }
         public virtual TransactionPartner TransactionPartner { get; set; }
         public virtual Account Account { get; set; } 
+        public virtual Budget? Budget { get; set; }
     }
 }
