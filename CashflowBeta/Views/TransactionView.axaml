@@ -3,6 +3,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="CashflowBeta.Views.TransactionView">
-  Welcome to Avalonia!
+             x:Class="CashflowBeta.Views.TransactionView"
+			 xmlns:vm="using:CashflowBeta.ViewModels"
+			 x:DataType="vm:TransactionViewModel">
+	<Border BorderBrush="Green" BorderThickness="1" Margin="5">
+		<DataGrid Margin="20" ItemsSource="{Binding Transactions}"
+          IsReadOnly="True"
+          CanUserReorderColumns="False"
+          CanUserResizeColumns="False"
+          CanUserSortColumns="True"
+          GridLinesVisibility="All"
+          BorderThickness="1" BorderBrush="Gray">
+			
+		</DataGrid>
+	</Border>
 </UserControl>

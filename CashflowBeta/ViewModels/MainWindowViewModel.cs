@@ -1,17 +1,23 @@
 ﻿using CashflowBeta.Services;
+using ReactiveUI;
+using System.Transactions;
 namespace CashflowBeta.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-#pragma warning disable CA1822 // Mark members as static
-        public string Greeting => "Welcome to Avalonia!";
-#pragma warning restore CA1822 // Mark members as static
+        private ViewModelBase _contentViewModel;
+        public TransactionViewModel TransactionsVm { get; }
+        public ViewModelBase ContentViewModel
+        {
+            get => _contentViewModel;
+            private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
+        }
 
         public MainWindowViewModel()
         {
-            using var context = new CashflowContext();
-            context.Database.EnsureCreated();
+            TransactionsVm = new TransactionViewModel();
+            _contentViewModel = TransactionsVm;
         }
-
+        
     }
 }

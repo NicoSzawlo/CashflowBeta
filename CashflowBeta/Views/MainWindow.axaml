@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		xmlns:views="clr-namespace:CashflowBeta.Views"
         x:Class="CashflowBeta.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -14,7 +15,39 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+		<Grid Margin="10">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				
+			</Grid.ColumnDefinitions>
+			<StackPanel Orientation="Horizontal"
+						Grid.Row="1">
+				<Button Width="100"
+						Height="50">
+					<TextBlock FontSize="10"
+							   FontWeight="Bold"
+							   TextAlignment="Center"
+							   VerticalAlignment="Center">
+						Transactions
+					</TextBlock>
+				</Button>
+				<Button Width="100"
+						Height="50">
+					<TextBlock
+							   FontSize="10"
+							   FontWeight="Bold"
+							   TextAlignment="Center"
+							   VerticalAlignment="Center">
+						Accounts
+					</TextBlock>
+				</Button>
+			</StackPanel>
+			<views:TransactionView DataContext="{Binding TransactionsVm}"
+								   Grid.Row="2"
+								   Height="380"/>
+		</Grid>
 </Window>
