@@ -86,7 +86,6 @@ namespace CashflowBeta.Services
                 entity.Property(e => e.TransactionPrice).IsRequired();
                 entity.Property(e => e.TransactionTime).IsRequired();
                 entity.Property(e => e.TransactionDuties).IsRequired();
-                entity.Property(e => e.Account).IsRequired();
                 entity.HasOne(d => d.Asset)
                     .WithMany(p => p.AssetTransactions);
             });
