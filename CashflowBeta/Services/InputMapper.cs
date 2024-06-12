@@ -12,9 +12,45 @@ namespace CashflowBeta.Services
     {
         public Account AddAccount()
         {
-            Account demoAccount = new Account { Name = "DemoAcc" };
+            Account demoAccount = new Account
+            {
+                ID = 1,
+                Name = "John Doe's Checking",
+                AccountIdentifier = "1234567890",
+                BankIdentifier = "Bank of America",
+                Balance = 10000
+            };
 
-        return demoAccount; 
+            return demoAccount;
+        }
+
+        public TransactionPartner GetPartner()
+        {
+            TransactionPartner demoPartner = new TransactionPartner
+            {
+                ID = 1,
+                Name = "John Doe",
+                AccountIdentifier = "1234567890",
+                BankIdentifier = "Bank of America",
+                Bankcode = "BOFA"
+            };
+            return demoPartner;
+        }
+        public CurrencyTransaction GetTransaction()
+        {
+            CurrencyTransaction transaction = new CurrencyTransaction
+            {
+                ID = 1,
+                DateTime = DateTime.Now,
+                Amount = 550,
+                Currency = "USD",
+                Info = "Payroll deposit",
+                Reference = "PAY123",
+                TransactionPartner = GetPartner(),
+                Account = 
+            };
+            return transaction; 
+
         }
     }
 }

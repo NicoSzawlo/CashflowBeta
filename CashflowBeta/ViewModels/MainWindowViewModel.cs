@@ -15,6 +15,8 @@ namespace CashflowBeta.ViewModels
 
         public MainWindowViewModel()
         {
+            using var context = new CashflowContext();
+            context.Database.EnsureCreated();
             TransactionsVm = new TransactionViewModel();
             _contentViewModel = TransactionsVm;
         }

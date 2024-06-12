@@ -17,7 +17,7 @@ namespace CashflowBeta.Services
         private string pw = "root";
 
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<CurrencyTransaction> CurrencyTransactions { get; set; }
         public DbSet<TransactionPartner> TransactionsPartners { get; set; }
         public DbSet<Asset> Assets { get; set; }
         public DbSet<AssetTransaction> AssetTransactions { get; set; }
@@ -40,7 +40,7 @@ namespace CashflowBeta.Services
                 entity.Property(e => e.AccountIdentifier).IsRequired();
             });
 
-            modelBuilder.Entity<Transaction>(entity =>
+            modelBuilder.Entity<CurrencyTransaction>(entity =>
             {
                 entity.HasKey(e => e.ID);
                 entity.Property(e => e.DateTime).IsRequired();

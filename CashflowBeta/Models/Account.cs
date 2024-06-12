@@ -13,7 +13,7 @@ namespace CashflowBeta.Models
         public string AccountIdentifier { get; set; }
         public string BankIdentifier { get; set; }
         public decimal Balance { get; set; }
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<CurrencyTransaction> Transactions { get; set; }
         public virtual ICollection<Asset> Assets { get; set; }
     }
 }

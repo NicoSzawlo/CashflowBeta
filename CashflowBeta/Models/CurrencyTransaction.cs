@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CashflowBeta.Models
 {
-    public class Transaction
+    public class CurrencyTransaction
     {
         public int ID { get; set; }
         public DateTime DateTime { get; set; }

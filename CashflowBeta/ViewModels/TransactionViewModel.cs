@@ -10,6 +10,6 @@ namespace CashflowBeta.ViewModels
 {
     public class TransactionViewModel : ViewModelBase
     {
-        ObservableCollection<Transaction> Transactions { get; }
+        ObservableCollection<CurrencyTransaction> Transactions { get; }
     }
 }
