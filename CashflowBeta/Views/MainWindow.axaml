@@ -15,39 +15,38 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-		<Grid Margin="10">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"></RowDefinition>
-				<RowDefinition Height="Auto"></RowDefinition>
-				<RowDefinition Height="Auto"></RowDefinition>
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				
-			</Grid.ColumnDefinitions>
-			<StackPanel Orientation="Horizontal"
-						Grid.Row="1">
-				<Button Width="100"
-						Height="50">
-					<TextBlock FontSize="10"
-							   FontWeight="Bold"
-							   TextAlignment="Center"
-							   VerticalAlignment="Center">
-						Transactions
-					</TextBlock>
+
+	<SplitView IsPaneOpen="{Binding IsPaneOpen}"
+			   OpenPaneLength="300"
+			   CompactPaneLength="50"
+			   DisplayMode="CompactInline"
+			   Background="Gray"
+			   PaneBackground="DarkGray">
+		<SplitView.Pane>
+			<StackPanel>
+				<Button Command="{Binding TriggerPaneCommand}">
+					-
 				</Button>
-				<Button Width="100"
-						Height="50">
-					<TextBlock
-							   FontSize="10"
-							   FontWeight="Bold"
-							   TextAlignment="Center"
-							   VerticalAlignment="Center">
-						Accounts
-					</TextBlock>
-				</Button>
+				<ListBox ItemsSource="{Binding MenuItems}" SelectedItem="{Binding SelectedMenuItem}">
+					<ListBox.ItemTemplate>
+						<DataTemplate DataType="{x:Type vm:Templates.MainMenuItemTemplate}">
+							<StackPanel Spacing="15" Orientation="Horizontal">
+								<TextBlock Text="{Binding Label}"/>
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
 			</StackPanel>
-			<views:TransactionView DataContext="{Binding TransactionsVm}"
-								   Grid.Row="2"
-								   Height="380"/>
-		</Grid>
+
+		</SplitView.Pane>
+
+		<SplitView.Content>
+			<Border BorderBrush="Green"
+					BorderThickness="1"
+					Margin="5"
+					CornerRadius="10 0 0 0">
+				<TransitioningContentControl Content="{Binding CurrentView}"/>
+			</Border>
+		</SplitView.Content>
+	</SplitView>
 </Window>

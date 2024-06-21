@@ -47,10 +47,9 @@ namespace CashflowBeta.Services
                 Info = "Payroll deposit",
                 Reference = "PAY123",
                 TransactionPartner = GetPartner(),
-                Account = 
+                Account = AddAccount()
             };
-            return transaction; 
-
+            return transaction;
         }
     }
 }

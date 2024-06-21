@@ -1,25 +1,48 @@
 ﻿using CashflowBeta.Services;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+using System;
 using System.Transactions;
+using CashflowBeta.ViewModels.Templates;
 namespace CashflowBeta.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public partial class MainWindowViewModel : ViewModelBase
     {
-        private ViewModelBase _contentViewModel;
-        public TransactionViewModel TransactionsVm { get; }
-        public ViewModelBase ContentViewModel
+        [ObservableProperty]
+        private bool _isPaneOpen;
+
+        [ObservableProperty]
+        private ViewModelBase _currentView;
+
+        public ObservableCollection<MainMenuItemTemplate> MenuItems { get; } = new()
         {
-            get => _contentViewModel;
-            private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
+            new MainMenuItemTemplate(typeof(HomeViewModel)),
+            new MainMenuItemTemplate(typeof(AccountViewModel)),
+            new MainMenuItemTemplate(typeof(TransactionViewModel))
+
+        };
+        [ObservableProperty]
+        public MainMenuItemTemplate? _selectedMenuItem;
+
+        partial void OnSelectedMenuItemChanged(MainMenuItemTemplate? value)
+        {
+            if (value == null)
+            {
+                return;
+            }
+            var instance = Activator.CreateInstance(value.ModelType);
+            if (instance == null)
+            {
+                return;
+            }
+            CurrentView = (ViewModelBase)instance;
         }
 
-        public MainWindowViewModel()
+        [RelayCommand]
+        private void TriggerPane()
         {
-            using var context = new CashflowContext();
-            context.Database.EnsureCreated();
-            TransactionsVm = new TransactionViewModel();
-            _contentViewModel = TransactionsVm;
+            IsPaneOpen = !IsPaneOpen;
         }
-        
     }
 }

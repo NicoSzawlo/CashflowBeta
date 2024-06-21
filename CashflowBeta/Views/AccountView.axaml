@@ -3,18 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="CashflowBeta.Views.TransactionView"
+             x:Class="CashflowBeta.Views.AccountView"
 			 xmlns:vm="using:CashflowBeta.ViewModels"
-			 x:DataType="vm:TransactionViewModel">
-	<Border BorderBrush="Green" BorderThickness="1" Margin="5">
-		<Button Width="100"
-						Height="50">
-			<TextBlock FontSize="10"
-					   FontWeight="Bold"
-					   TextAlignment="Center"
-					   VerticalAlignment="Center">
-				Transactions
-			</TextBlock>
-		</Button>
-	</Border>
+			 x:DataType="vm:AccountViewModel">
+  Welcome to the accountpage!
 </UserControl>
