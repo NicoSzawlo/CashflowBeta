@@ -11,7 +11,7 @@ namespace CashflowBeta.ViewModels.Templates
         public MainMenuItemTemplate(Type type)
         {
             ModelType = type;
-            Label = type.Name.Replace("PageViewModel", "");
+            Label = type.Name.Replace("ViewModel", "");
         }
         public string Label { get; }
         public Type ModelType { get; }

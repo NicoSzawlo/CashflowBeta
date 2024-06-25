@@ -12,7 +12,7 @@ namespace CashflowBeta.Services
     {
         public Account AddAccount()
         {
-            Account demoAccount = new Account
+            Account demoAccount = new()
             {
                 ID = 1,
                 Name = "John Doe's Checking",
@@ -26,7 +26,7 @@ namespace CashflowBeta.Services
 
         public TransactionPartner GetPartner()
         {
-            TransactionPartner demoPartner = new TransactionPartner
+            TransactionPartner demoPartner = new()
             {
                 ID = 1,
                 Name = "John Doe",
@@ -38,7 +38,7 @@ namespace CashflowBeta.Services
         }
         public CurrencyTransaction GetTransaction()
         {
-            CurrencyTransaction transaction = new CurrencyTransaction
+            CurrencyTransaction transaction = new()
             {
                 ID = 1,
                 DateTime = DateTime.Now,

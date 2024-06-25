@@ -6,5 +6,11 @@
              x:Class="CashflowBeta.Views.AccountView"
 			 xmlns:vm="using:CashflowBeta.ViewModels"
 			 x:DataType="vm:AccountViewModel">
-  Welcome to the accountpage!
+	<DockPanel>
+		<Button HorizontalAlignment="Center"
+				VerticalAlignment="Center"
+				Command="{Binding AddAccountCommand}">
+			Add Account Test
+		</Button>
+	</DockPanel>
 </UserControl>

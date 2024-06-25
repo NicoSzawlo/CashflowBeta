@@ -1,0 +1,66 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="420" d:DesignHeight="250"
+        x:Class="CashflowBeta.Views.AddAccountView"
+        Title="AddAccountView"
+		xmlns:vm="using:CashflowBeta.ViewModels"
+		x:DataType="vm:AddAccountViewModel">
+	<Grid Margin="10">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="2*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<TextBlock Grid.Column="0"
+				   Grid.Row="0"
+				   VerticalAlignment="Center">
+			String Input:
+		</TextBlock>
+		<TextBox Grid.Column="1" 
+				 Grid.Row="0" 
+				 Width="150" 
+				 HorizontalAlignment="Left" 
+				 Margin="5"/>
+
+		<TextBlock Grid.Column="0" 
+				   Grid.Row="1" 
+				   VerticalAlignment="Center">
+			File Path:
+		</TextBlock>
+		<TextBox Grid.Column="1" 
+				 Grid.Row="1" 
+				 Width="150" 
+				 HorizontalAlignment="Left" 
+				 Margin="5">
+		</TextBox>
+
+		<TextBlock Grid.Column="0" 
+				   Grid.Row="2" 
+				   VerticalAlignment="Center">
+			Number Input:
+		</TextBlock>
+		<TextBox Grid.Column="1" 
+				 Grid.Row="2" 
+				 Width="150" 
+				 HorizontalAlignment="Left" 
+				 Margin="5">
+		</TextBox>
+
+		<Button Grid.Column="1" 
+				Grid.Row="3" 
+				Width="100" 
+				HorizontalAlignment="Right"
+				VerticalAlignment="Bottom"
+				Margin="5" >
+			Confirm
+		</Button>
+	</Grid>
+</Window>
