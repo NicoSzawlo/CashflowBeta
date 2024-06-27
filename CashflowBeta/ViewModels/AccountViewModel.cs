@@ -15,10 +15,13 @@ namespace CashflowBeta.ViewModels
 {
     public partial class AccountViewModel : ViewModelBase
     {
+        private AddAccountViewModel addAccountViewModel = new();
+
         [RelayCommand]
         private void AddAccount()
         {
             var window = new AddAccountView();
+            window.DataContext = addAccountViewModel;
             window.Show();
         } 
     }
