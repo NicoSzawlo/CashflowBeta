@@ -6,5 +6,37 @@
              x:Class="CashflowBeta.Views.TransactionView"
 			 xmlns:vm="using:CashflowBeta.ViewModels"
 			 x:DataType="vm:TransactionViewModel">
-
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:TransactionViewModel/>
+	</Design.DataContext>
+	<DockPanel Margin="20">
+		<DataGrid DockPanel.Dock="Left"
+				  ItemsSource="{Binding Transactions, Mode=TwoWay}"
+					GridLinesVisibility="All"
+					BorderThickness="1" BorderBrush="Gray">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Date" Binding="{Binding DateTime}"/>
+				<DataGridTextColumn Header="Partner" Binding="{Binding TransactionPartner.Name}"/>
+				<DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
+				<DataGridTextColumn Header="Account" Binding="{Binding Account.Name}"/>
+			</DataGrid.Columns>
+		</DataGrid>
+		<StackPanel DockPanel.Dock="Right"
+					Width="200"
+					Spacing="10">
+			<TextBlock>
+				Information:
+			</TextBlock>
+			<TextBox Text=""/>
+			<TextBlock>
+				Transaction Reference:
+			</TextBlock>
+			<TextBox Text=""/>
+			<TextBlock>
+				Budget:
+			</TextBlock>
+		</StackPanel>
+	</DockPanel>
 </UserControl>
