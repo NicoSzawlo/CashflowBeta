@@ -13,11 +13,12 @@
 	</Design.DataContext>
 	<DockPanel Margin="20">
 		<DataGrid DockPanel.Dock="Left"
-				  ItemsSource="{Binding Transactions, Mode=TwoWay}"
+				  ItemsSource="{Binding Transactions}"
+				  SelectedItem="{Binding SelectedTransaction}"
 					GridLinesVisibility="All"
 					BorderThickness="1" BorderBrush="Gray">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="Date" Binding="{Binding DateTime}"/>
+				<DataGridTextColumn Header="Date" Binding="{Binding DateTime, StringFormat=d}"/>
 				<DataGridTextColumn Header="Partner" Binding="{Binding TransactionPartner.Name}"/>
 				<DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
 				<DataGridTextColumn Header="Account" Binding="{Binding Account.Name}"/>
@@ -29,14 +30,24 @@
 			<TextBlock>
 				Information:
 			</TextBlock>
-			<TextBox Text=""/>
+			<TextBox Text="{Binding SelectedTransaction.Info}"/>
 			<TextBlock>
 				Transaction Reference:
 			</TextBlock>
-			<TextBox Text=""/>
+			<TextBox Text="{Binding SelectedTransaction.Reference}"/>
 			<TextBlock>
-				Budget:
+				All transactions with partner:
 			</TextBlock>
+			<DataGrid	DockPanel.Dock="Left"
+						ItemsSource="{Binding TransactionsWithPartner}"
+						Height="200"
+					GridLinesVisibility="All"
+					BorderThickness="1" BorderBrush="Gray">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Date" Binding="{Binding DateTime, StringFormat=d}"/>
+					<DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
+				</DataGrid.Columns>
+			</DataGrid>
 		</StackPanel>
 	</DockPanel>
 </UserControl>
