@@ -12,21 +12,26 @@ namespace CashflowBeta.ViewModels
 {
     public partial class TransactionViewModel : ViewModelBase
     {
+        //Content of main datagrid
         public ObservableCollection<CurrencyTransaction> Transactions { get; } = new ObservableCollection<CurrencyTransaction>();
+        //Content of small datagrid showing all transactions with currently selected partner
         public ObservableCollection<CurrencyTransaction> TransactionsWithPartner { get; } = new ObservableCollection<CurrencyTransaction>();
-
+        //Selected transcation in main datagrid of view
         [ObservableProperty]
         private CurrencyTransaction _selectedTransaction;
 
+        //Reload TransactionsWithPartner when new transaction is selected
         partial void OnSelectedTransactionChanged(CurrencyTransaction? oldValue, CurrencyTransaction newValue)
         {
             TransactionsWithPartner.Clear();
             if (SelectedTransaction != null)
             {
                 var partner = newValue.TransactionPartner;
+                //Select all transactions with same partner as selected in main datagrid
                 var transactionsWithPartner = Transactions
                     .Where(t => t.TransactionPartner.ID == partner.ID)
                     .ToList();
+                //Fill collection
                 foreach (var transaction in transactionsWithPartner)
                 {
                     TransactionsWithPartner.Add(transaction);
@@ -35,6 +40,13 @@ namespace CashflowBeta.ViewModels
         }
 
         public TransactionViewModel()
+        {
+            //Implement loading from DatabaseContext here
+            AddDemoData();
+        }
+
+        //Write Mockdata into model-instances
+        private void AddDemoData()
         {
             Account Demoaccount = new Account()
             {
