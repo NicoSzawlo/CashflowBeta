@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using CashflowBeta.Services;
 namespace CashflowBeta.ViewModels
 {
     public partial class AccountViewModel : ViewModelBase
@@ -20,6 +20,12 @@ namespace CashflowBeta.ViewModels
         {
             var window = new AddAccountView();
             window.Show();
-        } 
+        }
+        [RelayCommand]
+        private void ProcessStatement()
+        {
+            var test = new CsvProcessing();
+            test.ProcessStatementFile();
+        }
     }
 }

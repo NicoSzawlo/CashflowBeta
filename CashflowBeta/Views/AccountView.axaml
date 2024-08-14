@@ -12,5 +12,10 @@
 				Command="{Binding AddAccountCommand}">
 			Add Account Test
 		</Button>
+		<Button HorizontalAlignment="Center"
+			   VerticalAlignment="Center"
+			   Command="{Binding ProcessStatementCommand}">
+			Process Statement Test
+		</Button>
 	</DockPanel>
 </UserControl>
