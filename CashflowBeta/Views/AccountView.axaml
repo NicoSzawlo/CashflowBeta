@@ -30,8 +30,8 @@
 		</Button>
 		<Button HorizontalAlignment="Center"
 			   VerticalAlignment="Center"
-			   Command="{Binding ProcessStatementCommand}">
-			Process Statement Test
+			   Command="{Binding EditMappingCommand}">
+			Edit CSV Mapping
 		</Button>
 	</DockPanel>
 </UserControl>

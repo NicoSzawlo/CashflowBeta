@@ -39,11 +39,12 @@ namespace CashflowBeta.ViewModels
             window.Show();
         }
         [RelayCommand]
-        private void ProcessStatement()
+        private void EditMapping()
         {
-            
-            //var test = new CsvProcessing();
-            //test.ProcessStatementFile();
+            CsvProcessing csvproc = new();
+            csvproc.ProcessStatementFile(SelectedAccount.ID);
+            //var window = new StatementMapView();
+            //window.Show();
         }
     }
 }

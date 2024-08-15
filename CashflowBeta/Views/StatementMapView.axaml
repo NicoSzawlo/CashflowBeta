@@ -5,5 +5,91 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CashflowBeta.StatementMapView"
         Title="StatementMapView">
-  Welcome to Avalonia!
+	<Grid Margin="10">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="2*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<!-- DateTimeHeader -->
+		<TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
+			DateTime Header:
+		</TextBlock>
+		<TextBox Grid.Column="1" Grid.Row="0" Width="200" HorizontalAlignment="Left" Margin="5"/>
+
+		<!-- DateTimeHeaderFormat -->
+		<TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">
+			DateTime Header Format:
+		</TextBlock>
+		<TextBox Grid.Column="1" Grid.Row="1" Width="200" HorizontalAlignment="Left" Margin="5"/>
+
+		<!-- AmountHeader -->
+		<TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">
+			Amount Header:
+		</TextBlock>
+		<TextBox Grid.Column="1" Grid.Row="2" Width="200" HorizontalAlignment="Left" Margin="5"/>
+
+		<!-- CurrencyHeader -->
+		<TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">
+			Currency Header:
+		</TextBlock>
+		<TextBox Grid.Column="1" Grid.Row="3" Width="200" HorizontalAlignment="Left" Margin="5"/>
+
+		<!-- InfoHeader -->
+		<TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">
+			Info Header:
+		</TextBlock>
+		<TextBox Grid.Column="1" Grid.Row="4" Width="200" HorizontalAlignment="Left" Margin="5"/>
+
+		<!-- ReferenceHeader -->
+		<TextBlock Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">
+			Reference Header:
+		</TextBlock>
+		<TextBox Grid.Column="1" Grid.Row="5" Width="200" HorizontalAlignment="Left" Margin="5"/>
+
+		<!-- PartnerNameHeader -->
+		<TextBlock Grid.Column="0" Grid.Row="6" VerticalAlignment="Center">
+			Partner Name Header:
+		</TextBlock>
+		<TextBox Grid.Column="1" Grid.Row="6" Width="200" HorizontalAlignment="Left" Margin="5"/>
+
+		<!-- PartnerAccountIdendifierHeader -->
+		<TextBlock Grid.Column="0" Grid.Row="7" VerticalAlignment="Center">
+			Partner Account Identifier Header:
+		</TextBlock>
+		<TextBox Grid.Column="1" Grid.Row="7" Width="200" HorizontalAlignment="Left" Margin="5"/>
+
+		<!-- PartnerBankIdentifierHeader -->
+		<TextBlock Grid.Column="0" Grid.Row="8" VerticalAlignment="Center">
+			Partner Bank Identifier Header:
+		</TextBlock>
+		<TextBox Grid.Column="1" Grid.Row="8" Width="200" HorizontalAlignment="Left" Margin="5"/>
+
+		<!-- PartnerBankCodeHeader -->
+		<TextBlock Grid.Column="0" Grid.Row="9" VerticalAlignment="Center">
+			Partner Bank Code Header:
+		</TextBlock>
+		<TextBox Grid.Column="1" Grid.Row="9" Width="200" HorizontalAlignment="Left" Margin="5"/>
+
+		<Button Grid.Column="1"
+				Grid.Row="9"
+				Width="100"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Bottom"
+				Margin="5" >
+			Confirm
+		</Button>
+	</Grid>
 </Window>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CashflowBeta.ViewModels
 {
-    internal class StatementMapViewModel
+    public class StatementMapViewModel
     {
     }
 }
