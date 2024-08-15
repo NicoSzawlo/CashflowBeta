@@ -6,7 +6,23 @@
              x:Class="CashflowBeta.Views.AccountView"
 			 xmlns:vm="using:CashflowBeta.ViewModels"
 			 x:DataType="vm:AccountViewModel">
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:AccountViewModel/>
+	</Design.DataContext>
 	<DockPanel>
+		<DataGrid DockPanel.Dock="Left"
+				  ItemsSource="{Binding Accounts}"
+				  SelectedItem="{Binding SelectedAccount}"
+					GridLinesVisibility="All"
+					BorderThickness="1" BorderBrush="Gray">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Account Name" Binding="{Binding Name}"/>
+				<DataGridTextColumn Header="Balance" Binding="{Binding Balance}"/>
+			</DataGrid.Columns>
+		</DataGrid>
+		<TextBlock Text="{Binding SelectedAccount.ID}"/>
 		<Button HorizontalAlignment="Center"
 				VerticalAlignment="Center"
 				Command="{Binding AddAccountCommand}">

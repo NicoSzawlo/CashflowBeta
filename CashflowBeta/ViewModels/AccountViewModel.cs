@@ -10,12 +10,29 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CashflowBeta.Services.StatementProcessing;
 using CashflowBeta.Services;
 namespace CashflowBeta.ViewModels
 {
     public partial class AccountViewModel : ViewModelBase
     {
-        [RelayCommand]
+        //List of accounts
+        public ObservableCollection<Account> Accounts { get; set; }
+        //Selected account in datagrid
+        [ObservableProperty]
+        private Account _selectedAccount;
+
+
+        public AccountViewModel() 
+        {
+            //Load Accounts from database
+            using (var context = new CashflowContext())
+            {
+                Accounts = new ObservableCollection<Account>(context.Accounts);
+            }
+        }
+
+[RelayCommand]
         private void AddAccount()
         {
             var window = new AddAccountView();
@@ -24,8 +41,9 @@ namespace CashflowBeta.ViewModels
         [RelayCommand]
         private void ProcessStatement()
         {
-            var test = new CsvProcessing();
-            test.ProcessStatementFile();
+            
+            //var test = new CsvProcessing();
+            //test.ProcessStatementFile();
         }
     }
 }
