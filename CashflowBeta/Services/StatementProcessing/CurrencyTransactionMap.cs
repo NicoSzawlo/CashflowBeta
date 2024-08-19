@@ -15,8 +15,7 @@ namespace CashflowBeta.Services.FileMapping
         public CurrencyTransactionMap(int accId)
         {
             //Load map for this account
-            CurrencyTransactionCsvMap map= new();
-            map.LoadMapForAccount(accId);
+            CurrencyTransactionCsvMap map = CurrencyTransactionCsvMap.LoadMapForAccount(accId);
             //Mapping transaction details
             Map(m => m.DateTime).Name(map.DateTimeHeader);
             Map(m => m.DateTime).TypeConverter<CsvHelper

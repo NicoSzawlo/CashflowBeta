@@ -12,17 +12,12 @@ using System.Text;
 using System.Threading.Tasks;
 using CashflowBeta.Services.StatementProcessing;
 using CashflowBeta.Services;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 namespace CashflowBeta.ViewModels
 {
     public partial class AccountViewModel : ViewModelBase
     {
-        //List of accounts
-        public ObservableCollection<Account> Accounts { get; set; }
-        //Selected account in datagrid
-        [ObservableProperty]
-        private Account _selectedAccount;
-
-
         public AccountViewModel() 
         {
             //Load Accounts from database
@@ -30,9 +25,22 @@ namespace CashflowBeta.ViewModels
             {
                 Accounts = new ObservableCollection<Account>(context.Accounts);
             }
+            //Register request message for selected account
+            WeakReferenceMessenger.Default.Register<AccountViewModel, Services.Messages.SelectedAccountRequestMessage>(this, (r, m) =>
+            {
+                //Reply with currently selected account
+                m.Reply(r.SelectedAccount);
+            });
         }
 
-[RelayCommand]
+        //List of accounts
+        public ObservableCollection<Account> Accounts { get; set; }
+        //Selected account in datagrid
+        [ObservableProperty]
+        private Account _selectedAccount;
+
+
+        [RelayCommand]
         private void AddAccount()
         {
             var window = new AddAccountView();
@@ -41,10 +49,9 @@ namespace CashflowBeta.ViewModels
         [RelayCommand]
         private void EditMapping()
         {
-            CsvProcessing csvproc = new();
-            csvproc.ProcessStatementFile(SelectedAccount.ID);
-            //var window = new StatementMapView();
-            //window.Show();
+            var window = new StatementMapView();
+            window.DataContext = new StatementMapViewModel();
+            window.Show();
         }
     }
 }

@@ -20,40 +20,55 @@ namespace CashflowBeta.Services.StatementProcessing
         public string PartnerBankIdentifierHeader { get; set; }
         public string PartnerBankCodeHeader { get; set; }
 
-        //Map to create or load a map for a currency transaction csv statement for specific account
-        public CurrencyTransactionCsvMap LoadMapForAccount(int accId)
+        // Constructor with initial values
+        public CurrencyTransactionCsvMap()
         {
-            string jsonString = File.ReadAllText(GenerateFilePath(accId));
-            CurrencyTransactionCsvMap map = JsonSerializer.Deserialize<CurrencyTransactionCsvMap>(jsonString);
+            DateTimeHeader = "Transaction Date";
+            DateTimeHeaderFormat = "yyyy-MM-dd HH:mm:ss"; // Example format
+            AmountHeader = "Amount";
+            CurrencyHeader = "Currency";
+            InfoHeader = "Transaction Info";
+            ReferenceHeader = "Reference";
+            PartnerNameHeader = "Partner Name";
+            PartnerAccountIdendifierHeader = "Partner Account ID";
+            PartnerBankIdentifierHeader = "Partner Bank ID";
+            PartnerBankCodeHeader = "Partner Bank Code";
+        }
+
+        //Map to create or load a map for a currency transaction csv statement for specific account
+        public static CurrencyTransactionCsvMap LoadMapForAccount(int accId)
+        {
+            string path = GenerateFilePath(accId);
+            CurrencyTransactionCsvMap map = new();
+            if (File.Exists(path))
+            {
+                string jsonString = File.ReadAllText(path);
+                map = JsonSerializer.Deserialize<CurrencyTransactionCsvMap>(jsonString) ?? new CurrencyTransactionCsvMap();
+            }
             return map;
         }
         //Map to create or save a map for a currency transaction csv statement for specific account
-        public void SaveMapForAccount(int accId, string[] strings)
+        public static void SaveMapForAccount(int accId, CurrencyTransactionCsvMap map)
         {
-            CurrencyTransactionCsvMap map = new()
-            {
-                DateTimeHeader = strings[0],
-                DateTimeHeaderFormat = strings[1],
-                AmountHeader = strings[2],
-                CurrencyHeader = strings[3],
-                InfoHeader = strings[4],
-                ReferenceHeader = strings[5],
-                PartnerNameHeader = strings[6],
-                PartnerAccountIdendifierHeader = strings[7],
-                PartnerBankIdentifierHeader = strings[8],
-                PartnerBankCodeHeader = strings[9]
-            };
+            string path = GenerateFilePath(accId);
             string jsonString = JsonSerializer.Serialize(map);
             GenerateFilePath(accId);
-            File.WriteAllText(GenerateFilePath(accId), jsonString);
+            if (File.Exists(path))
+            {
+                File.WriteAllText(path, jsonString);
+            }
+            else 
+            {
+                File.WriteAllText(path, jsonString);
+            }
         }
         //Method to generate the filepath for the selected account currency transaction csv statement map
-        private string GenerateFilePath(int accId)
+        private static string GenerateFilePath(int accId)
         {
             string path = Path.Combine(Environment.SpecialFolder.ApplicationData.ToString(),
                                        "CashFlow",
                                        "Maps",
-                                       $"account{accId.ToString()}map.json)");
+                                       $"account{accId.ToString()}map.json");
             return path;
         }
     }
