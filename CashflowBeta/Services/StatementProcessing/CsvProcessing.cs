@@ -15,9 +15,10 @@ namespace CashflowBeta.Services.StatementProcessing
 {
     public class CsvProcessing
     {
-        public void ProcessStatementFile(int accId)
+        public static void ProcessStatementFile(int accId)
         {
-            var reader = new StreamReader("C:\\Privat\\ftxcsv\\AT332026702001334800_2022-01-01_2023-01-01.csv");
+            string path = "C:\\Privat\\ftxcsv\\AT332026702001334800_2022-01-01_2023-01-01.csv";
+            var reader = new StreamReader(path);
             var csvconfig = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 Delimiter = ";"
@@ -25,6 +26,13 @@ namespace CashflowBeta.Services.StatementProcessing
             var csv = new CsvReader(reader, csvconfig);
             csv.Context.RegisterClassMap(new CurrencyTransactionMap(accId));
             var records = csv.GetRecords<CurrencyTransaction>();
+            List<CurrencyTransaction> transactions = new List<CurrencyTransaction>();
+
+            foreach (var record in records)
+            {
+                transactions.Add(record);
+            }
+            List<TransactionPartner> partners = TransactionPartnerService.GetDistinctPartners(transactions);
         }
     }
 }

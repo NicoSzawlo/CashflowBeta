@@ -14,6 +14,8 @@ using CashflowBeta.Services.StatementProcessing;
 using CashflowBeta.Services;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
+using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 namespace CashflowBeta.ViewModels
 {
     public partial class AccountViewModel : ViewModelBase
@@ -21,10 +23,8 @@ namespace CashflowBeta.ViewModels
         public AccountViewModel() 
         {
             //Load Accounts from database
-            using (var context = new CashflowContext())
-            {
-                Accounts = new ObservableCollection<Account>(context.Accounts);
-            }
+            
+            Accounts = new ObservableCollection<Account>(AccountService.GetAllAccounts());
             //Register request message for selected account
             WeakReferenceMessenger.Default.Register<AccountViewModel, Services.Messages.SelectedAccountRequestMessage>(this, (r, m) =>
             {
@@ -52,6 +52,11 @@ namespace CashflowBeta.ViewModels
             var window = new StatementMapView();
             window.DataContext = new StatementMapViewModel();
             window.Show();
+        }
+        [RelayCommand]
+        private void AddStatement()
+        {
+            CsvProcessing.ProcessStatementFile(SelectedAccount.ID);
         }
     }
 }

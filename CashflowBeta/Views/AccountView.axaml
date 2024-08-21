@@ -26,12 +26,17 @@
 		<Button HorizontalAlignment="Center"
 				VerticalAlignment="Center"
 				Command="{Binding AddAccountCommand}">
-			Add Account Test
+			Add Account
 		</Button>
 		<Button HorizontalAlignment="Center"
 			   VerticalAlignment="Center"
 			   Command="{Binding EditMappingCommand}">
 			Edit CSV Mapping
+		</Button>
+		<Button HorizontalAlignment="Center"
+				VerticalAlignment="Center"
+				Command="{Binding AddStatementCommand}">
+			Add Statement
 		</Button>
 	</DockPanel>
 </UserControl>
