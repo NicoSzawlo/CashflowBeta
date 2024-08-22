@@ -13,7 +13,7 @@ using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace CashflowBeta.Services.StatementProcessing
 {
-    public class CsvProcessing
+    public class StatementProcessing
     {
         public static void ProcessStatementFile(int accId)
         {
@@ -33,6 +33,7 @@ namespace CashflowBeta.Services.StatementProcessing
                 transactions.Add(record);
             }
             List<TransactionPartner> partners = TransactionPartnerService.GetDistinctPartners(transactions);
+            TransactionPartnerService.AddTransactionPartners(partners);
         }
     }
 }
