@@ -15,25 +15,39 @@ namespace CashflowBeta.Services.StatementProcessing
 {
     public class StatementProcessing
     {
-        public static void ProcessStatementFile(int accId)
+        public static void ProcessStatementFile(Account account)
         {
+            
             string path = "C:\\Privat\\ftxcsv\\AT332026702001334800_2022-01-01_2023-01-01.csv";
+            //Read in Csv File
             var reader = new StreamReader(path);
+
+            //Configure CsvHelper
             var csvconfig = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 Delimiter = ";"
             };
             var csv = new CsvReader(reader, csvconfig);
-            csv.Context.RegisterClassMap(new CurrencyTransactionMap(accId));
-            var records = csv.GetRecords<CurrencyTransaction>();
-            List<CurrencyTransaction> transactions = new List<CurrencyTransaction>();
 
+            //Load csv map for account
+            csv.Context.RegisterClassMap(new CurrencyTransactionMap(account.ID));
+
+            //Read records from csv file
+            var records = csv.GetRecords<CurrencyTransaction>();
+
+            //Convert records to transaction list
+            List<CurrencyTransaction> transactions = new();
             foreach (var record in records)
             {
                 transactions.Add(record);
             }
+
+            //Get partners from transactionlist and add to db
             List<TransactionPartner> partners = TransactionPartnerService.GetDistinctPartners(transactions);
             TransactionPartnerService.AddTransactionPartners(partners);
+
+            //Add transactions to db
+            CurrencyTransactionService.AddCurrencyTransactions(transactions, account);
         }
     }
 }

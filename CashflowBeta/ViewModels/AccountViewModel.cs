@@ -56,7 +56,7 @@ namespace CashflowBeta.ViewModels
         [RelayCommand]
         private void AddStatement()
         {
-            StatementProcessing.ProcessStatementFile(SelectedAccount.ID);
+            StatementProcessing.ProcessStatementFile(SelectedAccount);
         }
     }
 }

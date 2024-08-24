@@ -1,4 +1,5 @@
-﻿using CashflowBeta.Models;
+﻿using Avalonia.Metadata;
+using CashflowBeta.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,16 +55,26 @@ namespace CashflowBeta.Services
         //Add collection of partners to database
         public static void AddTransactionPartners(List<TransactionPartner> newPartners)
         {
+            using var context = new CashflowContext();
+            //Load current collection of partners
+            List<TransactionPartner> currentPartners = new(context.TransactionsPartners);
+            //Sort out new partners
+            List<TransactionPartner> distinctPartners = GetDistinctPartners(currentPartners, newPartners);
+            //Add and save to database
+            context.TransactionsPartners.AddRange(distinctPartners);
+            context.SaveChanges();
+        }
+        //Load all partners from database
+        public static List<TransactionPartner> GetAllPartners()
+        {
+            List<TransactionPartner> partners = new();
+
             using (var context = new CashflowContext())
             {
-                //Load current collection of partners
-                List<TransactionPartner> currentPartners = new(context.TransactionsPartners);
-                //Sort out new partners
-                List<TransactionPartner> distinctPartners = GetDistinctPartners(currentPartners, newPartners);
-                //Add and save to database
-                context.TransactionsPartners.AddRange(newPartners);
-                context.SaveChanges();
+                partners = new List<TransactionPartner>(context.TransactionsPartners);
             }
+
+            return partners;
         }
     }
 }
