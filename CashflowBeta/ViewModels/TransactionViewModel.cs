@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CashflowBeta.Models;
+using CashflowBeta.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -41,8 +42,8 @@ namespace CashflowBeta.ViewModels
 
         public TransactionViewModel()
         {
-            //Implement loading from DatabaseContext here
-            AddDemoData();
+            //Load transactions from database
+            Transactions = new ObservableCollection<CurrencyTransaction>(CurrencyTransactionService.GetAllTransactions());
         }
 
         //Write Mockdata into model-instances

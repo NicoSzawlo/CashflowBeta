@@ -23,7 +23,6 @@ namespace CashflowBeta.ViewModels
         public AccountViewModel() 
         {
             //Load Accounts from database
-            
             Accounts = new ObservableCollection<Account>(AccountService.GetAllAccounts());
             //Register request message for selected account
             WeakReferenceMessenger.Default.Register<AccountViewModel, Services.Messages.SelectedAccountRequestMessage>(this, (r, m) =>
