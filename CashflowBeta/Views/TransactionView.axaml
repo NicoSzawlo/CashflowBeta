@@ -25,7 +25,7 @@
 			</DataGrid.Columns>
 		</DataGrid>
 		<StackPanel DockPanel.Dock="Right"
-					Width="200"
+					Margin="10"
 					Spacing="10">
 			<TextBlock>
 				Information:
@@ -40,7 +40,6 @@
 			</TextBlock>
 			<DataGrid	DockPanel.Dock="Left"
 						ItemsSource="{Binding TransactionsWithPartner}"
-						Height="200"
 					GridLinesVisibility="All"
 					BorderThickness="1" BorderBrush="Gray">
 				<DataGrid.Columns>
