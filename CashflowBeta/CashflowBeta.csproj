@@ -13,6 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\account.png" />
+    <None Remove="Assets\home.png" />
+    <None Remove="Assets\Transaction.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.11" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.11" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.11" />
