@@ -7,5 +7,8 @@
 			 xmlns:vm="using:CashflowBeta.ViewModels"
 			 x:Class="CashflowBeta.Views.HomeView"
 			 x:DataType="vm:HomeViewModel">
-	<ScottPlot:AvaPlot Name="NetworthPlot"/>
+	<StackPanel>
+		<ScottPlot:AvaPlot Name="NetworthPlot"/>
+	</StackPanel>
+
 </UserControl>

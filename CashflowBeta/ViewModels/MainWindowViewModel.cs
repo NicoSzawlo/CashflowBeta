@@ -24,6 +24,14 @@ namespace CashflowBeta.ViewModels
         [ObservableProperty]
         public MainMenuItemTemplate? _selectedMenuItem;
 
+        public MainWindowViewModel()
+        {
+            //Initialising application to homeview
+            CurrentView = new HomeViewModel();
+            SelectedMenuItem = MenuItems[0];
+        }
+
+        //Change view from navigation menu
         partial void OnSelectedMenuItemChanged(MainMenuItemTemplate? value)
         {
             if (value == null)
@@ -37,7 +45,7 @@ namespace CashflowBeta.ViewModels
             }
             CurrentView = (ViewModelBase)instance;
         }
-
+        //Trigggers navigation menu pane
         [RelayCommand]
         private void TriggerPane()
         {

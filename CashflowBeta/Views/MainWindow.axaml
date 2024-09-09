@@ -26,12 +26,12 @@
 			<StackPanel>
 				<Button Command="{Binding TriggerPaneCommand}"
 						Height="50"
-						Width="300">
+						Width="300"
+						Padding="0,0,0,0">
 					<DockPanel>
-						<Image Source="avares://CashflowBeta/Assets/navicon.png"/>
-						<TextBlock FontSize="20"
-								   VerticalAlignment="Center"
-								   HorizontalAlignment="Center"> Menu </TextBlock>
+						<Image Source="avares://CashflowBeta/Assets/navicon.png"
+							   Margin="2"/>
+						<Image Source="avares://CashflowBeta/Assets/CashflowLogo.png"/>
 					</DockPanel>
 				</Button>
 				<ListBox ItemsSource="{Binding MenuItems}" 
