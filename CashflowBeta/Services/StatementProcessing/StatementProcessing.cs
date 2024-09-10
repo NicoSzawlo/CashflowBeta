@@ -15,10 +15,8 @@ namespace CashflowBeta.Services.StatementProcessing
 {
     public class StatementProcessing
     {
-        public static void ProcessStatementFile(Account account)
+        public static void ProcessStatementFile(string path,Account account)
         {
-            
-            string path = "C:\\Privat\\ftxcsv\\AT332026702001334800_2022-01-01_2023-01-01.csv";
             //Read in Csv File
             var reader = new StreamReader(path);
 

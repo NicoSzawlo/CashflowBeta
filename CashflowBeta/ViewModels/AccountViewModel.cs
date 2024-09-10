@@ -30,6 +30,10 @@ namespace CashflowBeta.ViewModels
                 //Reply with currently selected account
                 m.Reply(r.SelectedAccount);
             });
+            if (Accounts.Count > 0)
+            {
+                SelectedAccount = Accounts.First();
+            }
         }
 
         //List of accounts
@@ -37,7 +41,8 @@ namespace CashflowBeta.ViewModels
         //Selected account in datagrid
         [ObservableProperty]
         private Account _selectedAccount;
-
+        [ObservableProperty]
+        private string _statementPath;
 
         [RelayCommand]
         private void AddAccount()
@@ -55,7 +60,7 @@ namespace CashflowBeta.ViewModels
         [RelayCommand]
         private void AddStatement()
         {
-            StatementProcessing.ProcessStatementFile(SelectedAccount);
+            StatementProcessing.ProcessStatementFile(StatementPath,SelectedAccount);
         }
     }
 }

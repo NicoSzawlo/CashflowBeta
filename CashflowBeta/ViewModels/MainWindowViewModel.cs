@@ -27,8 +27,8 @@ namespace CashflowBeta.ViewModels
         public MainWindowViewModel()
         {
             //Initialising application to homeview
-            CurrentView = new HomeViewModel();
-            SelectedMenuItem = MenuItems[0];
+            //CurrentView = new HomeViewModel();
+            //SelectedMenuItem = MenuItems[0];
         }
 
         //Change view from navigation menu
