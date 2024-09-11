@@ -68,7 +68,7 @@ namespace CashflowBeta.Services
             runningDate = firstDate;
             //Calculate timespan
             timeSpan = lastDate - firstDate;
-#
+
             //Create list of dates between first and last transaction + 1 day for calculation of networth
             for (int i = 0; i <= timeSpan.TotalDays+1; i++)
             {
