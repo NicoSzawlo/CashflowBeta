@@ -38,13 +38,27 @@ namespace CashflowBeta.Services
         }
 
         //Get all transactions from database
-        public static List<CurrencyTransaction> GetAllTransactions()
+        public static List<CurrencyTransaction> GetTransactions()
         {
             List<CurrencyTransaction> transactions = new();
             //Load Accounts from database
             using (var context = new CashflowContext())
             {
                 transactions = new List<CurrencyTransaction>(context.CurrencyTransactions
+                    .Include(t => t.TransactionPartner)
+                    .Include(t => t.Account));
+            }
+            return transactions;
+        }
+        //Get all transactions from database for a specific account
+        public static List<CurrencyTransaction> GetTransactions(Account account)
+        {
+            List<CurrencyTransaction> transactions = new();
+            //Load Accounts from database
+            using (var context = new CashflowContext())
+            {
+                transactions = new List<CurrencyTransaction>(context.CurrencyTransactions
+                    .Where(t => t.Account.ID == account.ID)
                     .Include(t => t.TransactionPartner)
                     .Include(t => t.Account));
             }

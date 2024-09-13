@@ -34,6 +34,9 @@ namespace CashflowBeta.ViewModels
             {
                 SelectedAccount = Accounts.First();
             }
+            //NetworthService.AddNetworth();
+            //NetworthService.AddNetworth(Accounts[0]);
+            //NetworthService.AddNetworth(Accounts[1]);
         }
 
         //List of accounts

@@ -45,6 +45,7 @@
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="Date" Binding="{Binding DateTime, StringFormat=d}"/>
 					<DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
+					<DataGridTextColumn Header="Account" Binding="{Binding Account.Name}"/>
 				</DataGrid.Columns>
 			</DataGrid>
 		</StackPanel>

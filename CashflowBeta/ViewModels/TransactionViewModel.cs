@@ -29,11 +29,9 @@ namespace CashflowBeta.ViewModels
             {
                 //Get partner and account of selected transaction
                 var partner = newValue.TransactionPartner;
-                var account = newValue.Account;
                 //Select all transactions with same partner and account as selected in main datagrid
                 var transactionsWithPartner = Transactions
                     .Where(t => t.TransactionPartner.ID == partner.ID)
-                    .Where(t => t.Account.ID == account.ID)
                     .ToList();
                 //Fill collection
                 foreach (var transaction in transactionsWithPartner)
@@ -46,7 +44,9 @@ namespace CashflowBeta.ViewModels
         public TransactionViewModel()
         {
             //Load transactions from database
-            Transactions = new ObservableCollection<CurrencyTransaction>(CurrencyTransactionService.GetAllTransactions());
+            Transactions = new ObservableCollection<CurrencyTransaction>(
+                CurrencyTransactionService.GetTransactions()
+                .OrderByDescending(item => item.DateTime).ToList());
         }
 
         //Write Mockdata into model-instances
