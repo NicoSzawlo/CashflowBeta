@@ -14,9 +14,10 @@
 
   <ItemGroup>
     <None Remove="Assets\account.png" />
+    <None Remove="Assets\Budgets.png" />
     <None Remove="Assets\CashflowLogo.png" />
     <None Remove="Assets\home.png" />
-    <None Remove="Assets\Transaction.png" />
+    <None Remove="Assets\Transactions.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,5 +37,11 @@
     </PackageReference>
     <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="ScottPlot.Avalonia" Version="5.0.39" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\TransactionsView.axaml.cs">
+      <DependentUpon>TransactionsView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

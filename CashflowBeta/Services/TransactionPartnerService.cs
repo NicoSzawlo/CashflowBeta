@@ -1,5 +1,6 @@
 ﻿using Avalonia.Metadata;
 using CashflowBeta.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,10 +72,43 @@ namespace CashflowBeta.Services
 
             using (var context = new CashflowContext())
             {
-                partners = new List<TransactionPartner>(context.TransactionsPartners);
+                partners = new List<TransactionPartner>(
+                    context.TransactionsPartners
+                    .Include(p => p.Budget));
             }
 
             return partners;
+        }
+        //Load all partners from database
+        public static async Task<List<TransactionPartner>> GetAllPartnersAsync()
+        {
+            List<TransactionPartner> partners = new();
+
+            using (var context = new CashflowContext())
+            {
+                partners = new List<TransactionPartner>(
+                    context.TransactionsPartners
+                    .Include(p => p.Budget));
+            }
+            
+            return partners;
+        }
+        //Set budget to partners
+        public static async Task ApplyBudgetToPartnersAsync(Budget budget, List<TransactionPartner> partners)
+        {
+            using var context = new CashflowContext();
+            foreach (var partner in partners)
+            {
+                var existingPartner = await context.TransactionsPartners.SingleOrDefaultAsync(p => p.ID == partner.ID);
+
+                if (existingPartner != null)
+                {
+                    // Update the existing budget properties
+                    existingPartner.Budget = budget;
+                }
+                await context.SaveChangesAsync();
+                await CurrencyTransactionService.UpdateBudgets(partner);
+            }
         }
     }
 }

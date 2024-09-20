@@ -19,7 +19,8 @@ namespace CashflowBeta.ViewModels
         {
             new MainMenuItemTemplate(typeof(HomeViewModel)),
             new MainMenuItemTemplate(typeof(AccountViewModel)),
-            new MainMenuItemTemplate(typeof(TransactionViewModel))
+            new MainMenuItemTemplate(typeof(TransactionsViewModel)),
+            new MainMenuItemTemplate(typeof(BudgetsViewModel))
         };
         [ObservableProperty]
         public MainMenuItemTemplate? _selectedMenuItem;

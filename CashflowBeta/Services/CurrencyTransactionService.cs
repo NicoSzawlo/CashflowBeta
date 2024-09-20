@@ -36,7 +36,6 @@ namespace CashflowBeta.Services
             context.AddRange(transactions);
             context.SaveChanges();
         }
-
         //Get all transactions from database
         public static List<CurrencyTransaction> GetTransactions()
         {
@@ -46,7 +45,8 @@ namespace CashflowBeta.Services
             {
                 transactions = new List<CurrencyTransaction>(context.CurrencyTransactions
                     .Include(t => t.TransactionPartner)
-                    .Include(t => t.Account));
+                    .Include(t => t.Account)
+                    .Include(t => t.Budget));
             }
             return transactions;
         }
@@ -60,11 +60,41 @@ namespace CashflowBeta.Services
                 transactions = new List<CurrencyTransaction>(context.CurrencyTransactions
                     .Where(t => t.Account.ID == account.ID)
                     .Include(t => t.TransactionPartner)
-                    .Include(t => t.Account));
+                    .Include(t => t.Account)
+                    .Include(t=> t.Budget));
             }
             return transactions;
         }
-
+        //Get all transactions between 2 dates
+        public static List<CurrencyTransaction> GetTransactions(DateTimeOffset firstDay, DateTimeOffset lastDay)
+        {
+            List<CurrencyTransaction> transactions = new();
+            //Load Accounts from database
+            using (var context = new CashflowContext())
+            {
+                transactions = new List<CurrencyTransaction>(context.CurrencyTransactions
+                    .Where(t => t.DateTime >= firstDay)
+                    .Where(t => t.DateTime <= lastDay)
+                    .Include(t => t.TransactionPartner)
+                    .Include(t => t.Account)
+                    .Include(t => t.Budget));
+            }
+            return transactions;
+        }
+        //Update budgets for transaction with specific partner
+        public static async Task UpdateBudgets(TransactionPartner partner)
+        {
+            using var context = new CashflowContext();
+            List<CurrencyTransaction> transactions = new(
+                context.CurrencyTransactions
+                .Where(t => t.TransactionPartner == partner));
+            //Update budget for each transaction with specific partner
+            foreach (var transaction in transactions) 
+            {
+                transaction.Budget = partner.Budget;
+            }
+            await context.SaveChangesAsync();
+        }
         //Method to match the partners that are inside the database with the partners in the transaction list
         private static List<CurrencyTransaction> MatchTransactionsWithExistingPartners(List<CurrencyTransaction> transactions)
         {
@@ -76,6 +106,10 @@ namespace CashflowBeta.Services
                     if (partner.Name == transaction.TransactionPartner.Name)
                     {
                         transaction.TransactionPartner = partner;
+                        if(partner.Budget != null)
+                        {
+                            transaction.Budget = partner.Budget;
+                        }
                         break;
                     }
                 }
