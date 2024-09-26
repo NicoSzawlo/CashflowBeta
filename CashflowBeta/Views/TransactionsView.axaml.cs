@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace CashflowBeta.Views
 {
-    public partial class TransactionView : UserControl
+    public partial class TransactionsView : UserControl
     {
-        public TransactionView()
+        public TransactionsView()
         {
             InitializeComponent();
         }

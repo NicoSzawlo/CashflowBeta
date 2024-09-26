@@ -22,6 +22,7 @@ namespace CashflowBeta.Services
         public DbSet<Asset> Assets { get; set; }
         public DbSet<AssetTransaction> AssetTransactions { get; set; }
         public DbSet<Budget> Budgets { get; set; }
+        public DbSet<Networth> NetworthTrend {  get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -88,6 +89,13 @@ namespace CashflowBeta.Services
                 entity.Property(e => e.TransactionDuties).IsRequired();
                 entity.HasOne(d => d.Asset)
                     .WithMany(p => p.AssetTransactions);
+            });
+
+            modelBuilder.Entity<Networth>(entity =>
+            {
+                entity.HasKey(e => e.ID);
+                entity.Property(e => e.Capital).IsRequired();
+                entity.Property(e => e.DateTime).IsRequired();
             });
         }
     }

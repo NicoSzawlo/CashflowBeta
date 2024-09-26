@@ -14,6 +14,6 @@ namespace CashflowBeta.Models
         public string BankIdentifier { get; set; }
         public string Bankcode { get; set; }
         public virtual ICollection<CurrencyTransaction> Transactions { get; set; }
-
+        public virtual Budget? Budget { get; set; }
     }
 }

@@ -6,11 +6,44 @@
              x:Class="CashflowBeta.Views.AccountView"
 			 xmlns:vm="using:CashflowBeta.ViewModels"
 			 x:DataType="vm:AccountViewModel">
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:AccountViewModel/>
+	</Design.DataContext>
 	<DockPanel>
-		<Button HorizontalAlignment="Center"
+		<DataGrid DockPanel.Dock="Left"
+				  ItemsSource="{Binding Accounts}"
+				  SelectedItem="{Binding SelectedAccount}"
+					GridLinesVisibility="All"
+					BorderThickness="1" BorderBrush="Gray">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Account Name" Binding="{Binding Name}"/>
+				<DataGridTextColumn Header="Balance" Binding="{Binding Balance}"/>
+			</DataGrid.Columns>
+		</DataGrid>
+		<StackPanel>
+			<Button HorizontalAlignment="Center"
 				VerticalAlignment="Center"
 				Command="{Binding AddAccountCommand}">
-			Add Account Test
-		</Button>
+				Add Account
+			</Button>
+			<Button HorizontalAlignment="Center"
+				   VerticalAlignment="Center"
+				   Command="{Binding EditMappingCommand}">
+				Edit CSV Mapping
+			</Button>
+			<Button HorizontalAlignment="Center"
+					VerticalAlignment="Center"
+					Command="{Binding AddStatementCommand}">
+				Add Statement
+			</Button>
+			<StackPanel Orientation="Horizontal">
+				<TextBlock VerticalAlignment="Center">Statement Filepath</TextBlock>
+				<TextBox Text="{Binding StatementPath}"/>
+			</StackPanel>
+
+		</StackPanel>
+
 	</DockPanel>
 </UserControl>

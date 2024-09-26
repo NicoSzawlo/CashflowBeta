@@ -19,11 +19,20 @@ namespace CashflowBeta.ViewModels
         {
             new MainMenuItemTemplate(typeof(HomeViewModel)),
             new MainMenuItemTemplate(typeof(AccountViewModel)),
-            new MainMenuItemTemplate(typeof(TransactionViewModel))
+            new MainMenuItemTemplate(typeof(TransactionsViewModel)),
+            new MainMenuItemTemplate(typeof(BudgetsViewModel))
         };
         [ObservableProperty]
         public MainMenuItemTemplate? _selectedMenuItem;
 
+        public MainWindowViewModel()
+        {
+            //Initialising application to homeview
+            //CurrentView = new HomeViewModel();
+            //SelectedMenuItem = MenuItems[0];
+        }
+
+        //Change view from navigation menu
         partial void OnSelectedMenuItemChanged(MainMenuItemTemplate? value)
         {
             if (value == null)
@@ -37,7 +46,7 @@ namespace CashflowBeta.ViewModels
             }
             CurrentView = (ViewModelBase)instance;
         }
-
+        //Trigggers navigation menu pane
         [RelayCommand]
         private void TriggerPane()
         {

@@ -3,6 +3,61 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="CashflowBeta.Views.HomeView">
- Welcome to the homepage
+             xmlns:ScottPlot="clr-namespace:ScottPlot.Avalonia;assembly=ScottPlot.Avalonia"
+			 xmlns:vm="using:CashflowBeta.ViewModels"
+			 x:Class="CashflowBeta.Views.HomeView"
+			 x:DataType="vm:HomeViewModel">
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+				 to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:HomeViewModel/>
+	</Design.DataContext>
+	
+	<Panel>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="5*"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="4*"/>
+				<RowDefinition Height="4*"/>
+				<RowDefinition Height="1*"/>
+			</Grid.RowDefinitions>
+			<ScottPlot:AvaPlot Name="NetworthPlot"
+							   Grid.Row="0"
+							   Grid.Column="0"
+							   Margin="5"/>
+			<ScottPlot:AvaPlot Name="BudgetPlot"
+							   Grid.Row="1"
+							   Grid.Column="0"
+							   Margin="5"/>
+			<StackPanel Grid.Row="2"
+						Orientation="Horizontal"
+						HorizontalAlignment="Center">
+				<Button Command="{Binding PreviousMonthCommand}">
+					<TextBlock>
+						←
+					</TextBlock>
+				</Button>
+				<DatePicker DayVisible="false"
+							SelectedDate="{Binding BudgetMonth}"/>
+				<Button Command="{Binding NextMonthCommand}">
+					<TextBlock>
+						→
+					</TextBlock>
+				</Button>
+			</StackPanel>
+
+			<ScottPlot:AvaPlot Name="InOutPlot"
+							   Grid.Row="0"
+							   Grid.RowSpan="3"
+							   Grid.Column="1"
+							   Margin="5"/>
+		</Grid>
+	</Panel>
+	
+
+
+
 </UserControl>
