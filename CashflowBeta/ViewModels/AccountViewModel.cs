@@ -20,6 +20,7 @@ namespace CashflowBeta.ViewModels
 {
     public partial class AccountViewModel : ViewModelBase
     {
+
         public AccountViewModel() 
         {
             //Load Accounts from database
@@ -46,11 +47,14 @@ namespace CashflowBeta.ViewModels
         private Account _selectedAccount;
         [ObservableProperty]
         private string _statementPath;
+        
+        private AddAccountViewModel addAccountViewModel = new();
 
         [RelayCommand]
         private void AddAccount()
         {
             var window = new AddAccountView();
+            window.DataContext = addAccountViewModel;
             window.Show();
         }
         [RelayCommand]

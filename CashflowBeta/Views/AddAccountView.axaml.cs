@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using CashflowBeta.ViewModels;
 
 namespace CashflowBeta.Views
 {
