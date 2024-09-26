@@ -43,6 +43,12 @@ namespace CashflowBeta.Services
             List<Networth> networthTrend = CalculateNetworth();
             //Save data to database
             using var context = new CashflowContext();
+            var entitiesToDelete = context.NetworthTrend.Where(n => n.Account == null);
+            if (entitiesToDelete.Any())
+            {
+                context.NetworthTrend.RemoveRange(entitiesToDelete);
+                context.SaveChanges();
+            }
             context.AddRange(networthTrend);
             context.SaveChanges();
 

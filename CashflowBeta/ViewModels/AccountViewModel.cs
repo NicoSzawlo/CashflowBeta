@@ -47,12 +47,11 @@ namespace CashflowBeta.ViewModels
         private Account _selectedAccount;
         [ObservableProperty]
         private string _statementPath;
-        
-        private AddAccountViewModel addAccountViewModel = new();
 
         [RelayCommand]
         private void AddAccount()
         {
+            AddAccountViewModel addAccountViewModel = new();
             var window = new AddAccountView();
             window.DataContext = addAccountViewModel;
             window.Show();
@@ -61,7 +60,7 @@ namespace CashflowBeta.ViewModels
         private void EditMapping()
         {
             var window = new StatementMapView();
-            window.DataContext = new StatementMapViewModel();
+            window.DataContext = new StatementMapViewModel(SelectedAccount);
             window.Show();
         }
         [RelayCommand]

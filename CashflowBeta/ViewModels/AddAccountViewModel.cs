@@ -14,7 +14,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using CashflowBeta.Services;
+using CashflowBeta.Services.StatementProcessing;
 
 namespace CashflowBeta.ViewModels
 {
@@ -37,7 +38,16 @@ namespace CashflowBeta.ViewModels
 
         private Account newAccount = new();
 
+        public AddAccountViewModel()
+        {
+            newAccount = AccountService.AddNewAccount(newAccount);
 
+            NewAccountName = newAccount.Name;
+            NewBankIdentifier = newAccount.BankIdentifier;
+            NewAccountIdentifier = newAccount.AccountIdentifier;
+            NewBalance = newAccount.Balance.ToString();
+
+        }
 
         [RelayCommand]
         private async Task SelectStatementFile(CancellationChangeToken token)
@@ -65,11 +75,26 @@ namespace CashflowBeta.ViewModels
                 newAccount.BankIdentifier = NewBankIdentifier;
                 newAccount.AccountIdentifier = NewAccountIdentifier;
                 newAccount.Balance = decimal.Parse(NewBalance);
+
+                newAccount = AccountService.UpdateAccount(newAccount);
+
+                if (NewFilepath != null && NewFilepath != "")
+                {
+                    StatementProcessing.ProcessStatementFile(NewFilepath, newAccount);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        [RelayCommand]
+        private void EditMapping()
+        {
+            var window = new StatementMapView();
+            window.DataContext = new StatementMapViewModel(newAccount);
+            window.Show();
         }
 
         private async Task<IStorageFile?> DoOpenFilePickerAsync()

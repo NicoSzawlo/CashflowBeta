@@ -46,6 +46,8 @@ namespace CashflowBeta.Services.StatementProcessing
 
             //Add transactions to db
             CurrencyTransactionService.AddCurrencyTransactions(transactions, account);
+            NetworthService.AddNetworth(account);
+            NetworthService.AddNetworth();
         }
     }
 }

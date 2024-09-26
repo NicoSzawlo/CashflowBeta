@@ -1,4 +1,5 @@
 ﻿using CashflowBeta.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,5 +34,42 @@ namespace CashflowBeta.Services
             }
             return balance;
         }
-    }
+        
+        //Add account to database
+        public static Account AddNewAccount(Account acc)
+        {
+            using var context = new CashflowContext();
+            context.Accounts.Add(acc);
+            context.SaveChanges();
+
+            return acc;
+        }
+
+        //Update account
+        public static Account UpdateAccount(Account account) 
+        {
+            using var context = new CashflowContext();
+            if (account.ID == 0 || account.ID == null) // Insert new record
+            {
+                context.Accounts.Add(account); // Use AddAsync for asynchronous insert
+            }
+            else // Update existing record
+            {
+                var existingAccount = context.Accounts.SingleOrDefault(a => a.ID == account.ID);
+
+                if (existingAccount != null)
+                {
+                    // Update the existing budget properties
+                    existingAccount.Name = account.Name;
+                    existingAccount.AccountIdentifier = account.AccountIdentifier;
+                    existingAccount.BankIdentifier = account.BankIdentifier;
+                    existingAccount.Balance = account.Balance;
+
+                }
+            }
+            context.SaveChanges();
+            return account;
+        }
+
+        }
 }

@@ -26,17 +26,22 @@ namespace CashflowBeta.Services
             totalNetworth.Color = Colors.Blue;
             totalNetworth.LegendText = "Total Networth";
 
-            //Add individual account trendlines to plot
-            foreach(var trend in networthTrends)
+            if (networthTrends.Count > 2) 
             {
-                //Except first item in networthtrends as its not acc specific
-                if(trend != networthTrends[0])
+                //Add individual account trendlines to plot
+
+                foreach (var trend in networthTrends)
                 {
-                    var accLine = plot.Plot.Add.ScatterLine(GenerateCoordinates(trend));
-                    accLine.LineWidth = 2;
-                    accLine.LegendText = trend[0].Account.Name;
+                    //Except first item in networthtrends as its not acc specific
+                    if (trend != networthTrends[0])
+                    {
+                        var accLine = plot.Plot.Add.ScatterLine(GenerateCoordinates(trend));
+                        accLine.LineWidth = 2;
+                        accLine.LegendText = trend[0].Account.Name;
+                    }
                 }
             }
+            
             plot.Plot.ShowLegend(Alignment.UpperLeft, Orientation.Horizontal);
             return plot;
         }

@@ -20,10 +20,18 @@ namespace CashflowBeta.ViewModels
 
         [ObservableProperty]
         private Account _selectedAccount;
-        public StatementMapViewModel()
+        public StatementMapViewModel(Account account)
         {
-            // Request the currently selected account on opening the window
-            SelectedAccount = WeakReferenceMessenger.Default.Send<Services.Messages.SelectedAccountRequestMessage>();
+            if(account != null)
+            {
+                SelectedAccount = account;
+            }
+            else
+            {
+                // Request the currently selected account on opening the window
+                SelectedAccount = WeakReferenceMessenger.Default.Send<Services.Messages.SelectedAccountRequestMessage>();
+            }
+
             CsvMap = CurrencyTransactionCsvMap.LoadMapForAccount(SelectedAccount.ID);
         }
         [RelayCommand]

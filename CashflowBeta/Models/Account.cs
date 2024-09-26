@@ -15,5 +15,13 @@ namespace CashflowBeta.Models
         public decimal Balance { get; set; }
         public virtual ICollection<CurrencyTransaction> Transactions { get; set; }
         public virtual ICollection<Asset> Assets { get; set; }
+
+        public Account()
+        {
+            Name = "New Account";
+            AccountIdentifier = "IBANXXXX####XXXX";
+            BankIdentifier = "AB000111XXX";
+            Balance = 0;
+        }
     }
 }

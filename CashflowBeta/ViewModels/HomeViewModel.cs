@@ -20,7 +20,9 @@ namespace CashflowBeta.ViewModels
         private DateTimeOffset _budgetMonth;
         public HomeViewModel() 
         {
+            NetworthService.AddNetworth();
             BudgetMonth = new DateTimeOffset(new DateTime(2024,1,1,0,0,0));
+            
         }
 
         [RelayCommand]
