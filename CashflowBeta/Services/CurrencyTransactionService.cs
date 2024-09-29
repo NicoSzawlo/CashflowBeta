@@ -20,8 +20,8 @@ namespace CashflowBeta.Services
             //Match partners with db
             transactions = MatchTransactionsWithExistingPartners(transactions);
 
-            //Add method to check for dupes here
-            //#####################################################################
+            //Remove dupes
+            transactions = RemoveDupes(transactions, account);
 
             //Fill null values strings until migration for db was adapted
             transactions = FillNullWithEmptyString(transactions);
@@ -144,6 +144,31 @@ namespace CashflowBeta.Services
                 }
             }
             return transactions;
+        }
+        //Method to remove dupes from transactionlist
+        private static List<CurrencyTransaction> RemoveDupes(List<CurrencyTransaction> newTransactions, Account account) 
+        {
+            using var context = new CashflowContext();
+            var existingTransactions = GetTransactions(account);
+            List<CurrencyTransaction> uniqueTransactions = new List<CurrencyTransaction>();
+            bool isDupe = false;
+            foreach(var newTransaction in newTransactions)
+            {
+                foreach(var existingTransaction in existingTransactions.Where(t => t.TransactionPartner.ID == newTransaction.TransactionPartner.ID))
+                {
+                    if(newTransaction.DateTime == existingTransaction.DateTime
+                        && newTransaction.Amount == existingTransaction.Amount
+                        && newTransaction.Reference == existingTransaction.Reference)
+                    {
+                        isDupe = true;
+                    }
+                }
+                if (!isDupe)
+                {
+                    uniqueTransactions.Add(newTransaction);
+                }
+            }
+            return uniqueTransactions;
         }
     }
 }
