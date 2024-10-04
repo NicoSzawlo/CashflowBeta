@@ -81,6 +81,20 @@ namespace CashflowBeta.Services
             }
             return transactions;
         }
+        //Get earliest recorded transaction
+        public static CurrencyTransaction GetFirstTransaction()
+        {
+            using var context = new CashflowContext();
+            CurrencyTransaction transaction = context.CurrencyTransactions.OrderBy(t => t.DateTime).FirstOrDefault();
+            return transaction;
+        }
+        //Get last recorded transaction
+        public static CurrencyTransaction GetLastTransaction()
+        {
+            using var context = new CashflowContext();
+            CurrencyTransaction transaction = context.CurrencyTransactions.OrderByDescending(t => t.DateTime).FirstOrDefault();
+            return transaction;
+        }
         //Update budgets for transaction with specific partner
         public static async Task UpdateBudgets(TransactionPartner partner)
         {
@@ -170,5 +184,6 @@ namespace CashflowBeta.Services
             }
             return uniqueTransactions;
         }
+
     }
 }

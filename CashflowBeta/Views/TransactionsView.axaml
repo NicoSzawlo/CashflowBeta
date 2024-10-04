@@ -22,6 +22,7 @@
 				<DataGridTextColumn Header="Partner" Binding="{Binding TransactionPartner.Name}"/>
 				<DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
 				<DataGridTextColumn Header="Account" Binding="{Binding Account.Name}"/>
+				<DataGridTextColumn Header="Budget" Binding="{Binding Budget.Name}"/>
 			</DataGrid.Columns>
 		</DataGrid>
 		<StackPanel DockPanel.Dock="Right"

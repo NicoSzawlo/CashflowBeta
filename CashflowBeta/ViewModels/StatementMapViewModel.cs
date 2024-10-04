@@ -1,4 +1,5 @@
 ﻿using CashflowBeta.Models;
+using CashflowBeta.Services;
 using CashflowBeta.Services.StatementProcessing;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -32,12 +33,12 @@ namespace CashflowBeta.ViewModels
                 SelectedAccount = WeakReferenceMessenger.Default.Send<Services.Messages.SelectedAccountRequestMessage>();
             }
 
-            CsvMap = CurrencyTransactionCsvMap.LoadMapForAccount(SelectedAccount.ID);
+            CsvMap = FileService.LoadMapForAccount(SelectedAccount.ID);
         }
         [RelayCommand]
         private void SaveMap()
         {
-            CurrencyTransactionCsvMap.SaveMapForAccount(SelectedAccount.ID, CsvMap);
+            FileService.SaveMapForAccount(SelectedAccount.ID, CsvMap);
         }
     }
 }

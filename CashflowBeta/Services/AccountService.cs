@@ -22,19 +22,25 @@ namespace CashflowBeta.Services
             return accounts;
         }
 
-        //Get total balance of all accounts
+        // Method to calculate and return the total balance of all accounts
         public static decimal GetTotalBalance()
         {
+            // Initialize a variable to store the total balance
             decimal balance = 0;
+
+            // Get a list of all accounts
             List<Account> accounts = GetAllAccounts();
 
+            // Loop through each account and add its balance to the total
             foreach (var account in accounts)
             {
                 balance += account.Balance;
             }
+
+            // Return the total balance
             return balance;
         }
-        
+
         //Add account to database
         public static Account AddNewAccount(Account acc)
         {
@@ -71,5 +77,10 @@ namespace CashflowBeta.Services
             return account;
         }
 
+        public async Task DeleteAllRecordsAndResetIdentityAsync()
+        {
+
         }
+
+    }
 }

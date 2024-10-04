@@ -59,10 +59,26 @@ namespace CashflowBeta.Services
             List<Networth> networthTrend = CalculateNetworth(account);
             //Save data to database
             using var context = new CashflowContext();
+            var entitiesToDelete = context.NetworthTrend.Where(n => n.Account.ID == account.ID);
+            if (entitiesToDelete.Any())
+            {
+                context.NetworthTrend.RemoveRange(entitiesToDelete);
+                context.SaveChanges();
+            }
             context.Attach(account);
             context.AddRange(networthTrend);
             context.SaveChanges();
 
+        }
+        //Method to recalculate complete networth table
+        public static void RecalculateNetworthTrends()
+        {
+            var accounts = AccountService.GetAllAccounts();
+            AddNetworth();
+            foreach(Account acc in accounts)
+            {
+                AddNetworth(acc);
+            }
         }
         //Calculate and return networth list for all transaction currently in database
         public static List<Networth> CalculateNetworth()

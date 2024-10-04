@@ -68,8 +68,10 @@ namespace CashflowBeta.Services
             List<Budget> budgets = GetAllBudgets();
             foreach (var budget in budgets) 
             {
-                foreach (var transaction in transactions.Where(t => t.Budget.ID == budget.ID))
+                foreach (var transaction in transactions.Where(t => t.Budget?.ID == budget.ID))
                 {
+                    if(transaction.Budget == null) { 
+                    continue;}
                     budget.Amount += transaction.Amount;
                 }
             }

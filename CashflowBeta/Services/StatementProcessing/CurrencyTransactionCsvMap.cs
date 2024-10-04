@@ -34,42 +34,5 @@ namespace CashflowBeta.Services.StatementProcessing
             PartnerBankIdentifierHeader = "Partner Bank ID";
             PartnerBankCodeHeader = "Partner Bank Code";
         }
-
-        //Map to create or load a map for a currency transaction csv statement for specific account
-        public static CurrencyTransactionCsvMap LoadMapForAccount(int accId)
-        {
-            string path = GenerateFilePath(accId);
-            CurrencyTransactionCsvMap map = new();
-            if (File.Exists(path))
-            {
-                string jsonString = File.ReadAllText(path);
-                map = JsonSerializer.Deserialize<CurrencyTransactionCsvMap>(jsonString) ?? new CurrencyTransactionCsvMap();
-            }
-            return map;
-        }
-        //Map to create or save a map for a currency transaction csv statement for specific account
-        public static void SaveMapForAccount(int accId, CurrencyTransactionCsvMap map)
-        {
-            string path = GenerateFilePath(accId);
-            string jsonString = JsonSerializer.Serialize(map);
-            GenerateFilePath(accId);
-            if (File.Exists(path))
-            {
-                File.WriteAllText(path, jsonString);
-            }
-            else 
-            {
-                File.WriteAllText(path, jsonString);
-            }
-        }
-        //Method to generate the filepath for the selected account currency transaction csv statement map
-        private static string GenerateFilePath(int accId)
-        {
-            string path = Path.Combine(Environment.SpecialFolder.ApplicationData.ToString(),
-                                       "CashFlow",
-                                       "Maps",
-                                       $"account{accId.ToString()}map.json");
-            return path;
-        }
     }
 }

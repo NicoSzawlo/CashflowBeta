@@ -31,6 +31,7 @@ namespace CashflowBeta.ViewModels
             BudgetMonth = BudgetMonth.AddMonths(-1);
             UpdateBudgetGraph(BudgetMonth);
             UpdateInOutGraph(BudgetMonth);
+            
         }
         [RelayCommand]
         private void NextMonth()
@@ -38,6 +39,12 @@ namespace CashflowBeta.ViewModels
             BudgetMonth = BudgetMonth.AddMonths(1);
             UpdateBudgetGraph(BudgetMonth);
             UpdateInOutGraph(BudgetMonth);
+        }
+        [RelayCommand]
+        private static void ReloadNetworthTrend()
+        {
+            NetworthService.RecalculateNetworthTrends();
+            UpdateNetworthChart();
         }
 
 
@@ -49,8 +56,7 @@ namespace CashflowBeta.ViewModels
         }
         private static void UpdateNetworthChart()
         {
-            List<List<Networth>> networthTrends = new();
-            networthTrends.Add(NetworthService.GetNetworthTrend());
+            List<List<Networth>> networthTrends = [NetworthService.GetNetworthTrend()];
             
             List<Account> accounts = AccountService.GetAllAccounts();
             foreach(var acc in accounts)
