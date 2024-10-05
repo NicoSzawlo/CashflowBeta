@@ -1,4 +1,5 @@
-﻿using Avalonia.Metadata;
+﻿using Avalonia.Controls;
+using Avalonia.Metadata;
 using CashflowBeta.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -56,7 +57,9 @@ namespace CashflowBeta.Services
         //Add collection of partners to database
         public static void AddTransactionPartners(List<TransactionPartner> newPartners)
         {
+            
             using var context = new CashflowContext();
+            InitializeSystemPartners(context);
             //Load current collection of partners
             List<TransactionPartner> currentPartners = new(context.TransactionsPartners);
             //Sort out new partners
@@ -108,6 +111,50 @@ namespace CashflowBeta.Services
                 }
                 await context.SaveChangesAsync();
                 await CurrencyTransactionService.UpdateBudgets(partner);
+            }
+        }
+        //Search keywords and return fitting partner
+        public static TransactionPartner IdentifiedTransactionPartner(string input)
+        {
+            Dictionary<TransactionPartner, List<string>> partnerKeywords = FileService.LoadPartnerKeywords();
+            TransactionPartner identifiedPartner = new();
+            foreach(var entry in partnerKeywords)
+            {
+                TransactionPartner partner = entry.Key;
+                List<string> keywords = entry.Value;
+                foreach (var keyword in keywords) 
+                {
+                    if (input.Contains(keyword)) 
+                    {
+                        identifiedPartner = partner;
+                        break;
+                    }
+                }
+            }
+            return identifiedPartner;
+        }
+        //Check for and add systempartners "Cash withdrawal/Own Transfer
+        private static void InitializeSystemPartners(CashflowContext context)
+        {
+            if (context.TransactionsPartners.Count() <= 0)
+            {
+                TransactionPartner cashPartner = new()
+                {
+                    Name = "CashflowBeta Withdrawal",
+                    AccountIdentifier = "-",
+                    BankIdentifier = "-",
+                    Bankcode = "-",
+                };
+                TransactionPartner ownTransferPartner = new()
+                {
+                    Name = "CashflowBeta Withdrawal",
+                    AccountIdentifier = "-",
+                    BankIdentifier = "-",
+                    Bankcode = "-",
+                };
+                context.TransactionsPartners.Add(cashPartner);
+                context.TransactionsPartners.Add(ownTransferPartner);
+                context.SaveChanges();
             }
         }
     }

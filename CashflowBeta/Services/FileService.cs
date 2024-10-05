@@ -33,12 +33,44 @@ namespace CashflowBeta.Services
             return files.Count >= 1 ? files[0] : null;
         }
 
-        public static Dictionary<TransactionPartner,List<string>> LoadSpecialPartnerAssociatedStrings()
+        public static Dictionary<TransactionPartner, List<string>> LoadPartnerKeywords()
         {
-            Dictionary<TransactionPartner, List<string>> specialPartnerStrings = new();
-            
-            
-            return specialPartnerStrings;
+            //DEMODATA
+            //SHOULD BE MADE CUSTOM WITH DISPLAYS TO CONFIGURE WITH OWN KEYWORDS
+            // Create two transaction partners
+            var cashWithdrawalPartner = new TransactionPartner { Name = "Cash Withdrawal" };
+            var ownTransferPartner = new TransactionPartner { Name = "Own Transfer" };
+
+            // Create search term lists separately
+            List<string> cashWithdrawalTerms = new List<string>
+            {
+                "atm",
+                "automat",
+                "bargeld",
+                "cash",
+                "withdrawal",
+                "geldautomat",
+                "cashpoint"
+            };
+            List<string> ownTransferTerms = new List<string>
+            {
+                "saving",
+                "save",
+                "purpose",
+                "own",
+                "transfer",
+                "deposit",
+                "internal"
+            };
+
+            //Create dictionary
+            Dictionary<TransactionPartner, List<string>> partnerKeywords = new()
+                {
+                { cashWithdrawalPartner, cashWithdrawalTerms },
+                { ownTransferPartner, ownTransferTerms }
+            };
+
+            return partnerKeywords;
         }
         public static void SaveSpecialPartnerAssociatedStrings()
         {

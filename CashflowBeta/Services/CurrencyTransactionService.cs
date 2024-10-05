@@ -112,9 +112,27 @@ namespace CashflowBeta.Services
         //Method to match the partners that are inside the database with the partners in the transaction list
         private static List<CurrencyTransaction> MatchTransactionsWithExistingPartners(List<CurrencyTransaction> transactions)
         {
+            //Load all transactionpartners from the database
             List<TransactionPartner> partners = TransactionPartnerService.GetAllPartners();
+            //Go through all transactions
             foreach (CurrencyTransaction transaction in transactions)
             {
+                //If the partner from the transactionlist has no name check for other criteria
+                if(transaction.TransactionPartner.Name == "")
+                {
+                    //Check transaction reference for hint to partner
+                    var partner = TransactionPartnerService.IdentifiedTransactionPartner(transaction.Reference);
+                    //If check was not successful check transaction info
+                    if (partner.Name == null || partner.Name == "")
+                    {
+                        partner = TransactionPartnerService.IdentifiedTransactionPartner(transaction.Info);
+                    }
+                    //If successful set found partner to transaction
+                    if (partner.Name != "")
+                    {
+                        transaction.TransactionPartner = partner;
+                    }
+                }
                 foreach (TransactionPartner partner in partners)
                 {
                     if (partner.Name == transaction.TransactionPartner.Name)
@@ -184,6 +202,6 @@ namespace CashflowBeta.Services
             }
             return uniqueTransactions;
         }
-
+        
     }
 }
