@@ -117,7 +117,8 @@ namespace CashflowBeta.Services
         public static TransactionPartner IdentifiedTransactionPartner(string input)
         {
             Dictionary<TransactionPartner, List<string>> partnerKeywords = FileService.LoadPartnerKeywords();
-            TransactionPartner identifiedPartner = new();
+            TransactionPartner identifiedPartner = new() { ID = 0 };
+            if (input == null || input == "") return null;
             foreach(var entry in partnerKeywords)
             {
                 TransactionPartner partner = entry.Key;
@@ -140,14 +141,14 @@ namespace CashflowBeta.Services
             {
                 TransactionPartner cashPartner = new()
                 {
-                    Name = "CashflowBeta Withdrawal",
+                    Name = "Cash Withdrawal",
                     AccountIdentifier = "-",
                     BankIdentifier = "-",
                     Bankcode = "-",
                 };
                 TransactionPartner ownTransferPartner = new()
                 {
-                    Name = "CashflowBeta Withdrawal",
+                    Name = "Own Transfer",
                     AccountIdentifier = "-",
                     BankIdentifier = "-",
                     Bankcode = "-",

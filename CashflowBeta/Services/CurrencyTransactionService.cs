@@ -128,7 +128,7 @@ namespace CashflowBeta.Services
                         partner = TransactionPartnerService.IdentifiedTransactionPartner(transaction.Info);
                     }
                     //If successful set found partner to transaction
-                    if (partner.Name != "")
+                    if (partner.ID != 0)
                     {
                         transaction.TransactionPartner = partner;
                     }
