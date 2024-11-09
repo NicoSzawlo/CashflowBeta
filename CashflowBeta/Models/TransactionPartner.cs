@@ -19,6 +19,6 @@ namespace CashflowBeta.Models
         public TransactionPartner? ParentPartner { get; set; }
 
         // Navigation property for child partners
-        public virtual ICollection<TransactionPartner> ChildPartners { get; set; }
+        public virtual ICollection<TransactionPartner>? ChildPartners { get; set; }
     }
 }

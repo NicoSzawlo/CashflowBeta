@@ -45,6 +45,7 @@ namespace CashflowBeta.Services
             {
                 transactions = new List<CurrencyTransaction>(context.CurrencyTransactions
                     .Include(t => t.TransactionPartner)
+                    .Include(t => t.TransactionPartner.ParentPartner)
                     .Include(t => t.Account)
                     .Include(t => t.Budget));
             }
@@ -60,6 +61,7 @@ namespace CashflowBeta.Services
                 transactions = new List<CurrencyTransaction>(context.CurrencyTransactions
                     .Where(t => t.Account.ID == account.ID)
                     .Include(t => t.TransactionPartner)
+                    .Include(t => t.TransactionPartner.ParentPartner)
                     .Include(t => t.Account)
                     .Include(t=> t.Budget));
             }
@@ -76,6 +78,7 @@ namespace CashflowBeta.Services
                     .Where(t => t.DateTime >= firstDay)
                     .Where(t => t.DateTime <= lastDay)
                     .Include(t => t.TransactionPartner)
+                    .Include(t => t.TransactionPartner.ParentPartner)
                     .Include(t => t.Account)
                     .Include(t => t.Budget));
             }

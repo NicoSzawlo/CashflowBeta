@@ -60,9 +60,7 @@ namespace CashflowBeta.Services
                 entity.HasKey(e => e.ID);
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.AccountIdentifier).IsRequired();
-                entity.Property(e => e.BankIdentifier).IsRequired();
-                entity.HasOne(p => p.ParentPartner)
-                        .WithMany(p => p.ChildPartners);
+                entity.Property(e => e.BankIdentifier).IsRequired();;
             });
 
             modelBuilder.Entity<Budget>(entity =>

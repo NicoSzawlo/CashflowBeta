@@ -81,29 +81,35 @@ namespace CashflowBeta.Services
         {
             List<CurrencyTransaction> transactions = CurrencyTransactionService.GetTransactions(GetFirstDayOfMonth(month), GetLastDayOfMonth(month));
             List<Budget> io = new List<Budget>
-        {
-            new Budget
             {
-                ID = 1,
-                Name = "Income",
-                Description = "Incomes",
-                Amount = 0
-            },
-            new Budget
-            {
-                ID = 2,
-                Name = "Expense",
-                Description = "Expenses",
-                Amount = -0
-            }
-        };
+                new Budget
+                {
+                    ID = 1,
+                    Name = "Income",
+                    Description = "Incomes",
+                    Amount = 0
+                },
+                new Budget
+                {
+                    ID = 2,
+                    Name = "Expense",
+                    Description = "Expenses",
+                    Amount = -0
+                }
+            };
             foreach(var transaction in  transactions.Where(t => t.Amount > 0))
             {
-                io[0].Amount += transaction.Amount;
+                if (transaction.TransactionPartner.Name != "Own Transfer" || transaction.TransactionPartner.ParentPartner?.Name != "Own Transfer")
+                {
+                    io[0].Amount += transaction.Amount;    
+                }
             }
             foreach (var transaction in transactions.Where(t => t.Amount < 0))
             {
-                io[1].Amount += transaction.Amount;
+                if (transaction.TransactionPartner.Name != "Own Transfer" || transaction.TransactionPartner.ParentPartner?.Name != "Own Transfer")
+                {
+                    io[1].Amount += transaction.Amount;    
+                }
             }
             io[1].Amount = io[1].Amount * -1;
             return io;

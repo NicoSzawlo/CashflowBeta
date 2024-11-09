@@ -1,13 +1,9 @@
-﻿using Avalonia.Controls;
-using Avalonia.Metadata;
+﻿using System;
 using CashflowBeta.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
 namespace CashflowBeta.Services
 {
     public class TransactionPartnerService
@@ -96,6 +92,18 @@ namespace CashflowBeta.Services
             
             return partners;
         }
+        //Load instances of system partners from database
+        public static List<TransactionPartner> GetSystemPartners()
+        {
+            List<TransactionPartner> systempartners = new();
+
+            using (var context = new CashflowContext())
+            {
+                systempartners.Add(context.TransactionsPartners.Single(p => p.Name == "Cash Withdrawal"));
+                systempartners.Add(context.TransactionsPartners.Single(p => p.Name == "Own Transfer"));
+            }
+            return systempartners;
+        }
         //Set budget to partners
         public static async Task ApplyBudgetToPartnersAsync(Budget budget, List<TransactionPartner> partners)
         {
@@ -116,8 +124,10 @@ namespace CashflowBeta.Services
         //Search keywords and return fitting partner
         public static TransactionPartner IdentifiedTransactionPartner(string input)
         {
+            TransactionPartner identifiedPartner = new() {ID = 0, Name = "-"};
+            
+            //Get list of keywords linked with partners
             Dictionary<TransactionPartner, List<string>> partnerKeywords = FileService.LoadPartnerKeywords();
-            TransactionPartner identifiedPartner = new() { ID = 0 };
             if (input == null || input == "") return null;
             foreach(var entry in partnerKeywords)
             {
@@ -125,7 +135,7 @@ namespace CashflowBeta.Services
                 List<string> keywords = entry.Value;
                 foreach (var keyword in keywords) 
                 {
-                    if (input.Contains(keyword)) 
+                    if (input.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) > -1) 
                     {
                         identifiedPartner = partner;
                         break;

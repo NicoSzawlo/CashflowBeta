@@ -38,8 +38,9 @@ namespace CashflowBeta.Services
             //DEMODATA
             //SHOULD BE MADE CUSTOM WITH DISPLAYS TO CONFIGURE WITH OWN KEYWORDS
             // Create two transaction partners
-            var cashWithdrawalPartner = new TransactionPartner { Name = "Cash Withdrawal" };
-            var ownTransferPartner = new TransactionPartner { Name = "Own Transfer" };
+            
+            var cashWithdrawalPartner = TransactionPartnerService.GetSystemPartners()[0];
+            var ownTransferPartner = TransactionPartnerService.GetSystemPartners()[1];
 
             // Create search term lists separately
             List<string> cashWithdrawalTerms = new List<string>
@@ -109,9 +110,16 @@ namespace CashflowBeta.Services
         private static string GenerateFilePath(int accId)
         {
             string path = Path.Combine(Environment.SpecialFolder.ApplicationData.ToString(),
-                                       "CashFlow",
-                                       "Maps",
-                                       $"account{accId.ToString()}map.json");
+                "CashFlow",
+                "Maps");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            path = Path.Combine(Environment.SpecialFolder.ApplicationData.ToString(),
+                "CashFlow",
+                "Maps",
+                $"account{accId.ToString()}map.json");
             return path;
         }
     }
