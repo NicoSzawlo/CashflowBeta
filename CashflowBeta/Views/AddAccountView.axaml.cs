@@ -4,6 +4,8 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using CashflowBeta.ViewModels;
 using System.IO;
+using Avalonia.Markup.Xaml;
+using CashflowBeta.Converters;
 
 namespace CashflowBeta.Views
 {
@@ -12,6 +14,12 @@ namespace CashflowBeta.Views
         public AddAccountView()
         {
             InitializeComponent();
+        }
+
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
+            this.Resources["BoolToColorconverter"] = new BoolToColorConverter();
         }
     }
 }

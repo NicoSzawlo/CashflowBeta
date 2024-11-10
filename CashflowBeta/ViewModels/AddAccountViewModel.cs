@@ -1,6 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Platform.Storage;
+﻿using Avalonia.Platform.Storage;
 using CashflowBeta.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -9,10 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using CashflowBeta.Services;
 using CashflowBeta.Services.StatementProcessing;
@@ -26,7 +23,17 @@ namespace CashflowBeta.ViewModels
 
         [ObservableProperty]
         private string _newFilepath;
-
+        partial void OnNewFilepathChanged(string value)
+        {
+            FilepathIsValid = CheckIfValidFilepath(value);
+        }
+        private bool CheckIfValidFilepath(string filepath)
+        {
+            bool conditionTrue = false;
+            return File.Exists(NewFilepath);
+        }
+        [ObservableProperty] private bool _FilepathIsValid = false;
+        
         [ObservableProperty]
         private string _newBankIdentifier;
 
@@ -35,18 +42,18 @@ namespace CashflowBeta.ViewModels
 
         [ObservableProperty]
         private string _newBalance;
-
-        private Account newAccount = new();
+    
+        private Account _newAccount = new();
 
         public AddAccountViewModel()
         {
-            newAccount = AccountService.AddNewAccount(newAccount);
+            _newAccount = AccountService.AddNewAccount(_newAccount);
 
-            NewAccountName = newAccount.Name;
-            NewBankIdentifier = newAccount.BankIdentifier;
-            NewAccountIdentifier = newAccount.AccountIdentifier;
-            NewBalance = newAccount.Balance.ToString();
-
+            NewAccountName = _newAccount.Name;
+            NewBankIdentifier = _newAccount.BankIdentifier;
+            NewAccountIdentifier = _newAccount.AccountIdentifier;
+            NewBalance = _newAccount.Balance.ToString();
+            
         }
 
         [RelayCommand]
@@ -59,6 +66,7 @@ namespace CashflowBeta.ViewModels
 
                 await file.OpenReadAsync();
                 NewFilepath = file.TryGetLocalPath();
+                
             }
             catch (Exception ex) 
             {
@@ -71,16 +79,16 @@ namespace CashflowBeta.ViewModels
         {
             try
             {
-                newAccount.Name = NewAccountName;
-                newAccount.BankIdentifier = NewBankIdentifier;
-                newAccount.AccountIdentifier = NewAccountIdentifier;
-                newAccount.Balance = decimal.Parse(NewBalance);
+                _newAccount.Name = NewAccountName;
+                _newAccount.BankIdentifier = NewBankIdentifier;
+                _newAccount.AccountIdentifier = NewAccountIdentifier;
+                _newAccount.Balance = decimal.Parse(NewBalance);
 
-                newAccount = AccountService.UpdateAccount(newAccount);
+                _newAccount = AccountService.UpdateAccount(_newAccount);
 
                 if (NewFilepath != null && NewFilepath != "")
                 {
-                    StatementProcessing.ProcessStatementFile(NewFilepath, newAccount);
+                    StatementProcessing.ProcessStatementFile(NewFilepath, _newAccount);
                 }
             }
             catch (Exception ex)
@@ -92,9 +100,14 @@ namespace CashflowBeta.ViewModels
         [RelayCommand]
         private void EditMapping()
         {
-            var window = new StatementMapView();
-            window.DataContext = new StatementMapViewModel(newAccount);
-            window.Show();
+            if (FilepathIsValid)
+            {
+                List<string> headers = StatementProcessing.GetCsvHeaders(NewFilepath);
+                string headerstring = string.Join("\n", headers);
+                var window = new StatementMapView();
+                window.DataContext = new StatementMapViewModel(_newAccount, headerstring);
+                window.Show();
+            }
         }
 
         private async Task<IStorageFile?> DoOpenFilePickerAsync()

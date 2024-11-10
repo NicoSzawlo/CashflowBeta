@@ -4,100 +4,127 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CashflowBeta.StatementMapView"
-        Title="StatementMapView"
-		xmlns:vm="using:CashflowBeta.ViewModels"
-		x:DataType="vm:StatementMapViewModel">
-	<Design.DataContext>
-		<!-- This only sets the DataContext for the previewer in an IDE,
+        Title="Setup CSV-Map for bank statement file"
+        xmlns:vm="using:CashflowBeta.ViewModels"
+        x:DataType="vm:StatementMapViewModel"
+        Height="500"
+        Width="1000">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-		<vm:StatementMapViewModel/>
-	</Design.DataContext>
-	<Grid Margin="10">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="2*"/>
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
+        <vm:StatementMapViewModel />
+    </Design.DataContext>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-		<!-- DateTimeHeader -->
-		<TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
-			DateTime Header:
-		</TextBlock>
-		<TextBox Grid.Column="1" Grid.Row="0" Width="200" HorizontalAlignment="Left" Margin="5" Text="{Binding CsvMap.DateTimeHeader}"/>
+        <!-- DateTimeHeader -->
+        <TextBlock Grid.Column="0" Grid.Row="0" VerticalAlignment="Center">
+            DateTime Header:
+        </TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="0" Width="200" HorizontalAlignment="Left" Margin="5"
+                 Text="{Binding CsvMap.DateTimeHeader}" />
+        
+        <!-- DateTimeHeaderFormat -->
+        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">
+            DateTime Header Format:
+        </TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="1" Width="200" HorizontalAlignment="Left" Margin="5"
+                 Text="{Binding CsvMap.DateTimeHeaderFormat}" />
 
-		<!-- DateTimeHeaderFormat -->
-		<TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center">
-			DateTime Header Format:
-		</TextBlock>
-		<TextBox Grid.Column="1" Grid.Row="1" Width="200" HorizontalAlignment="Left" Margin="5" Text="{Binding CsvMap.DateTimeHeaderFormat}"/>
+        <!-- AmountHeader -->
+        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">
+            Amount Header:
+        </TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="2" Width="200" HorizontalAlignment="Left" Margin="5"
+                 Text="{Binding CsvMap.AmountHeader}" />
 
-		<!-- AmountHeader -->
-		<TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center">
-			Amount Header:
-		</TextBlock>
-		<TextBox Grid.Column="1" Grid.Row="2" Width="200" HorizontalAlignment="Left" Margin="5" Text="{Binding CsvMap.AmountHeader}"/>
+        <!-- CurrencyHeader -->
+        <TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">
+            Currency Header:
+        </TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="3" Width="200" HorizontalAlignment="Left" Margin="5"
+                 Text="{Binding CsvMap.CurrencyHeader}" />
 
-		<!-- CurrencyHeader -->
-		<TextBlock Grid.Column="0" Grid.Row="3" VerticalAlignment="Center">
-			Currency Header:
-		</TextBlock>
-		<TextBox Grid.Column="1" Grid.Row="3" Width="200" HorizontalAlignment="Left" Margin="5" Text="{Binding CsvMap.CurrencyHeader}"/>
+        <!-- InfoHeader -->
+        <TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">
+            Info Header:
+        </TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="4" Width="200" HorizontalAlignment="Left" Margin="5"
+                 Text="{Binding CsvMap.InfoHeader}" />
 
-		<!-- InfoHeader -->
-		<TextBlock Grid.Column="0" Grid.Row="4" VerticalAlignment="Center">
-			Info Header:
-		</TextBlock>
-		<TextBox Grid.Column="1" Grid.Row="4" Width="200" HorizontalAlignment="Left" Margin="5" Text="{Binding CsvMap.InfoHeader}"/>
+        <!-- ReferenceHeader -->
+        <TextBlock Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">
+            Reference Header:
+        </TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="5" Width="200" HorizontalAlignment="Left" Margin="5"
+                 Text="{Binding CsvMap.ReferenceHeader}" />
 
-		<!-- ReferenceHeader -->
-		<TextBlock Grid.Column="0" Grid.Row="5" VerticalAlignment="Center">
-			Reference Header:
-		</TextBlock>
-		<TextBox Grid.Column="1" Grid.Row="5" Width="200" HorizontalAlignment="Left" Margin="5" Text="{Binding CsvMap.ReferenceHeader}"/>
+        <!-- PartnerNameHeader -->
+        <TextBlock Grid.Column="0" Grid.Row="6" VerticalAlignment="Center">
+            Partner Name Header:
+        </TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="6" Width="200" HorizontalAlignment="Left" Margin="5"
+                 Text="{Binding CsvMap.PartnerNameHeader}" />
 
-		<!-- PartnerNameHeader -->
-		<TextBlock Grid.Column="0" Grid.Row="6" VerticalAlignment="Center">
-			Partner Name Header:
-		</TextBlock>
-		<TextBox Grid.Column="1" Grid.Row="6" Width="200" HorizontalAlignment="Left" Margin="5" Text="{Binding CsvMap.PartnerNameHeader}"/>
+        <!-- PartnerAccountIdendifierHeader -->
+        <TextBlock Grid.Column="0" Grid.Row="7" VerticalAlignment="Center">
+            Partner Account Identifier Header:
+        </TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="7" Width="200" HorizontalAlignment="Left" Margin="5"
+                 Text="{Binding CsvMap.PartnerAccountIdendifierHeader}" />
 
-		<!-- PartnerAccountIdendifierHeader -->
-		<TextBlock Grid.Column="0" Grid.Row="7" VerticalAlignment="Center">
-			Partner Account Identifier Header:
-		</TextBlock>
-		<TextBox Grid.Column="1" Grid.Row="7" Width="200" HorizontalAlignment="Left" Margin="5" Text="{Binding CsvMap.PartnerAccountIdendifierHeader}"/>
+        <!-- PartnerBankIdentifierHeader -->
+        <TextBlock Grid.Column="0" Grid.Row="8" VerticalAlignment="Center">
+            Partner Bank Identifier Header:
+        </TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="8" Width="200" HorizontalAlignment="Left" Margin="5"
+                 Text="{Binding CsvMap.PartnerBankIdentifierHeader}" />
 
-		<!-- PartnerBankIdentifierHeader -->
-		<TextBlock Grid.Column="0" Grid.Row="8" VerticalAlignment="Center">
-			Partner Bank Identifier Header:
-		</TextBlock>
-		<TextBox Grid.Column="1" Grid.Row="8" Width="200" HorizontalAlignment="Left" Margin="5" Text="{Binding CsvMap.PartnerBankIdentifierHeader}"/>
+        <!-- PartnerBankCodeHeader -->
+        <TextBlock Grid.Column="0" Grid.Row="9" VerticalAlignment="Center">
+            Partner Bank Code Header:
+        </TextBlock>
+        <TextBox Grid.Column="1" Grid.Row="9" Width="200" HorizontalAlignment="Left" Margin="5"
+                 Text="{Binding CsvMap.PartnerBankCodeHeader}" />
 
-		<!-- PartnerBankCodeHeader -->
-		<TextBlock Grid.Column="0" Grid.Row="9" VerticalAlignment="Center">
-			Partner Bank Code Header:
-		</TextBlock>
-		<TextBox Grid.Column="1" Grid.Row="9" Width="200" HorizontalAlignment="Left" Margin="5" Text="{Binding CsvMap.PartnerBankCodeHeader}"/>
-
-		<Button Grid.Column="1"
-				Grid.Row="9"
-				Width="100"
-				HorizontalAlignment="Right"
-				VerticalAlignment="Bottom"
-				Margin="5"
-				Command="{Binding SaveMapCommand}">
-			Save Map
-		</Button>
-	</Grid>
+        
+        <TextBlock Grid.Column="2" 
+                   Grid.Row="0" 
+                   VerticalAlignment="Center">
+            Headers from CSV-File:
+        </TextBlock>
+        <TextBox Grid.Row="1" 
+                 Grid.RowSpan="9"
+                 Grid.Column="2"
+                 Text="{Binding Headers}"></TextBox>
+        <Button Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Grid.Row="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Height="50"
+                Margin="5"
+                Command="{Binding SaveMapCommand}">
+            Save Map for selected Account
+        </Button>
+    </Grid>
 </Window>

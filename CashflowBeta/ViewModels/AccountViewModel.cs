@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,13 +32,6 @@ namespace CashflowBeta.ViewModels
                 //Reply with currently selected account
                 m.Reply(r.SelectedAccount);
             });
-            if (Accounts.Count > 0)
-            {
-                SelectedAccount = Accounts.First();
-            }
-            //NetworthService.AddNetworth();
-            //NetworthService.AddNetworth(Accounts[0]);
-            //NetworthService.AddNetworth(Accounts[1]);
         }
 
         //List of accounts
@@ -45,8 +39,32 @@ namespace CashflowBeta.ViewModels
         //Selected account in datagrid
         [ObservableProperty]
         private Account _selectedAccount;
+
+        partial void OnSelectedAccountChanged(Account value)
+        {
+            AccountSelected = (value != null);
+        }
+
+        [ObservableProperty] private bool _accountSelected = false;
+        
         [ObservableProperty]
-        private string _statementPath;
+        private string _newFilepath;
+        partial void OnNewFilepathChanged(string value)
+        {
+            FilepathIsValid = CheckIfValidFilepath(value);
+        }
+        private bool CheckIfValidFilepath(string filepath)
+        {
+            if (File.Exists(filepath) && SelectedAccount != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        [ObservableProperty] private bool _filepathIsValid = false;
 
         [RelayCommand]
         private void AddAccount()
@@ -59,14 +77,32 @@ namespace CashflowBeta.ViewModels
         [RelayCommand]
         private void EditMapping()
         {
+            string headerstring = "";
+            
+            if (FilepathIsValid)
+            {
+                List<string> headers = StatementProcessing.GetCsvHeaders(NewFilepath);
+                headerstring = string.Join("\n", headers);
+            }
+            
             var window = new StatementMapView();
-            window.DataContext = new StatementMapViewModel(SelectedAccount);
+            window.DataContext = new StatementMapViewModel(SelectedAccount, headerstring);
             window.Show();
         }
         [RelayCommand]
         private void AddStatement()
         {
-            StatementProcessing.ProcessStatementFile(StatementPath,SelectedAccount);
+            StatementProcessing.ProcessStatementFile(NewFilepath,SelectedAccount);
+        }
+
+        [RelayCommand]
+        private async Task DeleteAccount()
+        {
+            Account selected = new();
+            selected = SelectedAccount;
+            Accounts.Remove(selected);
+            await AccountService.DeleteAccount(selected);
+            
         }
     }
 }

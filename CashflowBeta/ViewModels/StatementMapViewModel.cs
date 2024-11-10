@@ -11,30 +11,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CsvHelper.Configuration.Attributes;
 
 namespace CashflowBeta.ViewModels
 {
     public partial class StatementMapViewModel : ViewModelBase
     {
-        [ObservableProperty]
-        private CurrencyTransactionCsvMap _csvMap;
+        [ObservableProperty] private CurrencyTransactionCsvMap _csvMap;
 
-        [ObservableProperty]
-        private Account _selectedAccount;
-        public StatementMapViewModel(Account account)
+        [ObservableProperty] private Account _selectedAccount;
+
+        [ObservableProperty] private string _headers;
+        [ObservableProperty] private bool _headersAvailable = false;
+
+        public StatementMapViewModel(Account? account, string headers)
         {
-            if(account != null)
+            if (headers != null)
+            {
+                Headers = headers;
+                HeadersAvailable = true;
+            }
+            
+            if (account != null)
             {
                 SelectedAccount = account;
             }
             else
             {
                 // Request the currently selected account on opening the window
-                SelectedAccount = WeakReferenceMessenger.Default.Send<Services.Messages.SelectedAccountRequestMessage>();
+                SelectedAccount =
+                    WeakReferenceMessenger.Default.Send<Services.Messages.SelectedAccountRequestMessage>();
             }
 
             CsvMap = FileService.LoadMapForAccount(SelectedAccount.ID);
         }
+
         [RelayCommand]
         private void SaveMap()
         {

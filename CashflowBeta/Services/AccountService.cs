@@ -77,9 +77,12 @@ namespace CashflowBeta.Services
             return account;
         }
 
-        public async Task DeleteAllRecordsAndResetIdentityAsync()
+        public async static Task DeleteAccount(Account account)
         {
-
+            using var context = new CashflowContext();
+            var acc = context.Accounts.SingleOrDefault(a => a.ID == account.ID);
+            context.Accounts.Remove(acc);
+            await context.SaveChangesAsync();
         }
 
     }

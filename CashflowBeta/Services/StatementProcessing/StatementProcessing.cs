@@ -48,5 +48,26 @@ namespace CashflowBeta.Services.StatementProcessing
             NetworthService.AddNetworth(account);
             NetworthService.AddNetworth();
         }
+
+        public static List<string> GetCsvHeaders(string path)
+        {
+            //Read in Csv File
+            var reader = new StreamReader(path);
+
+            //Configure CsvHelper
+            var csvconfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = ";"
+            };
+            var csv = new CsvReader(reader, csvconfig);
+            csv.Read();
+            List<string> headers = new();
+            foreach (var record in csv.Parser.Record)
+            {
+                headers.Add(record.ToString());
+            };
+            return headers;
+        }
     }
+    
 }
