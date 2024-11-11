@@ -4,79 +4,79 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="CashflowBeta.Views.BudgetsView"
-			 xmlns:vm="using:CashflowBeta.ViewModels"
-			 x:DataType="vm:BudgetsViewModel">
-		<Design.DataContext>
-			<!-- This only sets the DataContext for the previewer in an IDE,
+             xmlns:vm="using:CashflowBeta.ViewModels"
+             x:DataType="vm:BudgetsViewModel">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
 				 to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-			<vm:BudgetsViewModel/>
-		</Design.DataContext>
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition></ColumnDefinition>
-			<ColumnDefinition Width="150"></ColumnDefinition>
-			<ColumnDefinition></ColumnDefinition>
-		</Grid.ColumnDefinitions>
-		<DataGrid	Grid.Column="0"
-					ItemsSource="{Binding Budgets}"
-					SelectedItem="{Binding SelectedBudget}"
-					GridLinesVisibility="All"
-					BorderThickness="1" BorderBrush="Gray">
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="Budget Name" Binding="{Binding Name}"/>
-				<DataGridTextColumn Header="Amount" Binding="{Binding Amount}"/>
-			</DataGrid.Columns>
-		</DataGrid>
+        <vm:BudgetsViewModel />
+    </Design.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Column="0"
+                  ItemsSource="{Binding Budgets}"
+                  SelectedItem="{Binding SelectedBudget}"
+                  GridLinesVisibility="All"
+                  BorderThickness="1" BorderBrush="Gray">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Budget Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" />
+            </DataGrid.Columns>
+        </DataGrid>
 
-		<StackPanel Grid.Column="1"
-					HorizontalAlignment="Center"
-					VerticalAlignment="Center">
-			<Button Height="50"
-					Width="140"
-					HorizontalAlignment="Center"
-					Command="{Binding AddNewBudgetCommand}">
-				<TextBlock HorizontalAlignment="Center">
-					Add New Budget
-				</TextBlock>
-			</Button>
-			<Button	Height="50"
-					Width="140"
-					HorizontalAlignment="Center"
-					Command="{Binding DeleteBudgetCommand}">
-				<TextBlock HorizontalAlignment="Center">
-					Delete Budget
-				</TextBlock>
-			</Button>
-			<Button	Height="50"
-					Width="140"
-					HorizontalAlignment="Center"
-					Command="{Binding ApplyBudgetToPartnerCommand}">
-				<TextBlock HorizontalAlignment="Center">
-					Apply Budget<LineBreak/>To Partner
-				</TextBlock>
-			</Button>
-			<Button	Height="50"
-					Width="140"
-					HorizontalAlignment="Center"
-					Command="{Binding SaveChangesCommand}">
-				<TextBlock HorizontalAlignment="Center">
-					Save Changes
-				</TextBlock>
-			</Button>
-		</StackPanel>
-		
-		<DataGrid	Name="TransactionPartnersGrid"
-					Grid.Column="2"
-					ItemsSource="{Binding TransactionPartners}"
-					SelectedItem="{Binding SelectedPartner}"
-					GridLinesVisibility="All"
-					BorderThickness="1" BorderBrush="Gray"
-					SelectionMode="Extended"
-					SelectionChanged="TransactionPartnersGrid_SelectionChanged">
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="Partner Name" Binding="{Binding Name}" />
-				<DataGridTextColumn Header="Budget" Binding="{Binding Budget.Name}"/>
-			</DataGrid.Columns>
-		</DataGrid>
-	</Grid>
+        <StackPanel Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <Button Height="50"
+                    Width="140"
+                    HorizontalAlignment="Center"
+                    Command="{Binding AddNewBudgetCommand}">
+                <TextBlock HorizontalAlignment="Center">
+                    Add New Budget
+                </TextBlock>
+            </Button>
+            <Button Height="50"
+                    Width="140"
+                    HorizontalAlignment="Center"
+                    Command="{Binding DeleteBudgetCommand}">
+                <TextBlock HorizontalAlignment="Center">
+                    Delete Budget
+                </TextBlock>
+            </Button>
+            <Button Height="50"
+                    Width="140"
+                    HorizontalAlignment="Center"
+                    Command="{Binding ApplyBudgetToPartnerCommand}">
+                <TextBlock HorizontalAlignment="Center">
+                    Apply Budget<LineBreak />To Partner
+                </TextBlock>
+            </Button>
+            <Button Height="50"
+                    Width="140"
+                    HorizontalAlignment="Center"
+                    Command="{Binding SaveChangesCommand}">
+                <TextBlock HorizontalAlignment="Center">
+                    Save Changes
+                </TextBlock>
+            </Button>
+        </StackPanel>
+
+        <DataGrid Name="TransactionPartnersGrid"
+                  Grid.Column="2"
+                  ItemsSource="{Binding TransactionPartners}"
+                  SelectedItem="{Binding SelectedPartner}"
+                  GridLinesVisibility="All"
+                  BorderThickness="1" BorderBrush="Gray"
+                  SelectionMode="Extended"
+                  SelectionChanged="TransactionPartnersGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Partner Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Budget" Binding="{Binding Budget.Name}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
 </UserControl>

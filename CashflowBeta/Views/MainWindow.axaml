@@ -4,72 +4,71 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-		xmlns:views="clr-namespace:CashflowBeta.Views"
         x:Class="CashflowBeta.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="avares://CashflowBeta/Assets/Budgets.png"
+        Icon="avares://CashflowBeta/Assets/SmallCashflowLogo.png"
         Title="CashflowBeta">
 
-	<Design.DataContext>
+    <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
 
-	<SplitView IsPaneOpen="{Binding IsPaneOpen}"
-			   OpenPaneLength="300"
-			   CompactPaneLength="50"
-			   DisplayMode="CompactInline"
-			   Background="Gray"
-			   PaneBackground="DarkGray">
-		<SplitView.Pane>
-			<StackPanel>
-				<Button Command="{Binding TriggerPaneCommand}"
-						Height="50"
-						Width="300"
-						Padding="0,0,0,0">
-					<DockPanel>
-						<Image Source="avares://CashflowBeta/Assets/navicon.png"
-							   Margin="2"/>
-						<Image Source="avares://CashflowBeta/Assets/CashflowLogo.png"/>
-					</DockPanel>
-				</Button>
-				<ListBox ItemsSource="{Binding MenuItems}" 
-						 SelectedItem="{Binding SelectedMenuItem}"
-						 Background="DarkGreen">
-					<ListBox.ItemTemplate>
-						<DataTemplate DataType="{x:Type vm:Templates.MainMenuItemTemplate}">
-							<Grid ColumnDefinitions="50,250" RowDefinitions="50">
-								<Image Source="{Binding ImageFromBinding}"
-									   MaxHeight="38"
-									   MaxWidth="38"
-									   Grid.Column="0"/>
-								<TextBlock Text="{Binding Label}"
-										   FontSize="18"
-										   HorizontalAlignment="Center"
-										   VerticalAlignment="Center"
-										   Grid.Column="1"/>
-							</Grid>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
+    <SplitView IsPaneOpen="{Binding IsPaneOpen}"
+               OpenPaneLength="300"
+               CompactPaneLength="50"
+               DisplayMode="CompactInline"
+               Background="Gray"
+               PaneBackground="DarkGray">
+        <SplitView.Pane>
+            <StackPanel>
+                <Button Command="{Binding TriggerPaneCommand}"
+                        Height="50"
+                        Width="300"
+                        Padding="0,0,0,0">
+                    <DockPanel>
+                        <Image Source="avares://CashflowBeta/Assets/navicon.png"
+                               Margin="2" />
+                        <Image Source="avares://CashflowBeta/Assets/CashflowLogo.png" />
+                    </DockPanel>
+                </Button>
+                <ListBox ItemsSource="{Binding MenuItems}"
+                         SelectedItem="{Binding SelectedMenuItem}"
+                         Background="DarkGreen">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type vm:Templates.MainMenuItemTemplate}">
+                            <Grid ColumnDefinitions="50,250" RowDefinitions="50">
+                                <Image Source="{Binding ImageFromBinding}"
+                                       MaxHeight="38"
+                                       MaxWidth="38"
+                                       Grid.Column="0" />
+                                <TextBlock Text="{Binding Label}"
+                                           FontSize="18"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Grid.Column="1" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
 
-					<ListBox.Styles>
-						<Style Selector="ListBoxItem">
-							<Setter Property="Padding" Value="0" />
-						</Style>
-					</ListBox.Styles>
-				</ListBox>
-			</StackPanel>
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="Padding" Value="0" />
+                        </Style>
+                    </ListBox.Styles>
+                </ListBox>
+            </StackPanel>
 
-		</SplitView.Pane>
+        </SplitView.Pane>
 
-		<SplitView.Content>
-			<Border BorderBrush="Green"
-					BorderThickness="1"
-					Margin="5"
-					CornerRadius="10 0 0 0">
-				<TransitioningContentControl Content="{Binding CurrentView}"/>
-			</Border>
-		</SplitView.Content>
-	</SplitView>
+        <SplitView.Content>
+            <Border BorderBrush="Green"
+                    BorderThickness="1"
+                    Margin="5"
+                    CornerRadius="10 0 0 0">
+                <TransitioningContentControl Content="{Binding CurrentView}" />
+            </Border>
+        </SplitView.Content>
+    </SplitView>
 </Window>

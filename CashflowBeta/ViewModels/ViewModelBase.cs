@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace CashflowBeta.ViewModels
+namespace CashflowBeta.ViewModels;
+
+public class ViewModelBase : ObservableObject
 {
-    public class ViewModelBase : ObservableObject
-    {
-    }
 }

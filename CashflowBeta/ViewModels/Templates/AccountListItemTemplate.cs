@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CashflowBeta.Models;
+﻿using CashflowBeta.Models;
 
-namespace CashflowBeta.ViewModels.Templates
+namespace CashflowBeta.ViewModels.Templates;
+
+public class AccountListItemTemplate
 {
-    public class AccountListItemTemplate
+    public AccountListItemTemplate(Account account)
     {
-        public Account account { get; }
-        public AccountListItemTemplate(Account account)
-        {
-            this.account = account;
-        }
+        this.account = account;
     }
+
+    public Account account { get; }
 }

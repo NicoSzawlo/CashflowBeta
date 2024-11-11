@@ -1,135 +1,125 @@
-﻿using Avalonia.Platform.Storage;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform.Storage;
 using CashflowBeta.Models;
+using CashflowBeta.Services;
+using CashflowBeta.Services.StatementProcessing;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Primitives;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using CashflowBeta.Services;
-using CashflowBeta.Services.StatementProcessing;
 
-namespace CashflowBeta.ViewModels
+namespace CashflowBeta.ViewModels;
+
+public partial class AddAccountViewModel : ViewModelBase
 {
-    public partial class AddAccountViewModel : ViewModelBase
+    [ObservableProperty] private bool _FilepathIsValid;
+
+    private Account? _newAccount = new();
+
+    [ObservableProperty] private string _newAccountIdentifier;
+
+    [ObservableProperty] private string _newAccountName;
+
+    [ObservableProperty] private string _newBalance;
+
+    [ObservableProperty] private string _newBankIdentifier;
+
+    [ObservableProperty] private string? _newFilepath;
+
+    public AddAccountViewModel()
     {
-        [ObservableProperty]
-        private string _newAccountName;
+        _newAccount = AccountService.AddNewAccount(_newAccount);
 
-        [ObservableProperty]
-        private string _newFilepath;
-        partial void OnNewFilepathChanged(string value)
+        NewAccountName = _newAccount.Name;
+        NewBankIdentifier = _newAccount.BankIdentifier;
+        NewAccountIdentifier = _newAccount.AccountIdentifier;
+        NewBalance = _newAccount.Balance.ToString();
+    }
+
+    partial void OnNewFilepathChanged(string? value)
+    {
+        FilepathIsValid = CheckIfValidFilepath(value);
+    }
+
+    private bool CheckIfValidFilepath(string? filepath)
+    {
+        var conditionTrue = false;
+        return File.Exists(NewFilepath);
+    }
+
+    [RelayCommand]
+    private async Task SelectStatementFile(CancellationChangeToken token)
+    {
+        try
         {
-            FilepathIsValid = CheckIfValidFilepath(value);
+            var file = await DoOpenFilePickerAsync();
+            if (file is null) return;
+
+            await file.OpenReadAsync();
+            NewFilepath = file.TryGetLocalPath();
         }
-        private bool CheckIfValidFilepath(string filepath)
+        catch (Exception ex)
         {
-            bool conditionTrue = false;
-            return File.Exists(NewFilepath);
+            Console.WriteLine(ex.Message);
         }
-        [ObservableProperty] private bool _FilepathIsValid = false;
-        
-        [ObservableProperty]
-        private string _newBankIdentifier;
+    }
 
-        [ObservableProperty]
-        private string _newAccountIdentifier;
-
-        [ObservableProperty]
-        private string _newBalance;
-    
-        private Account _newAccount = new();
-
-        public AddAccountViewModel()
+    [RelayCommand]
+    private void ConfirmInput()
+    {
+        try
         {
-            _newAccount = AccountService.AddNewAccount(_newAccount);
+            _newAccount.Name = NewAccountName;
+            _newAccount.BankIdentifier = NewBankIdentifier;
+            _newAccount.AccountIdentifier = NewAccountIdentifier;
+            _newAccount.Balance = decimal.Parse(NewBalance);
 
-            NewAccountName = _newAccount.Name;
-            NewBankIdentifier = _newAccount.BankIdentifier;
-            NewAccountIdentifier = _newAccount.AccountIdentifier;
-            NewBalance = _newAccount.Balance.ToString();
-            
+            _newAccount = AccountService.UpdateAccount(_newAccount);
+
+            if (NewFilepath != null && NewFilepath != "")
+                StatementProcessing.ProcessStatementFile(NewFilepath, _newAccount);
         }
-
-        [RelayCommand]
-        private async Task SelectStatementFile(CancellationChangeToken token)
+        catch (Exception ex)
         {
-            try
-            {
-                var file = await DoOpenFilePickerAsync();
-                if (file is null) return;
-
-                await file.OpenReadAsync();
-                NewFilepath = file.TryGetLocalPath();
-                
-            }
-            catch (Exception ex) 
-            {
-                Console.WriteLine(ex.Message);
-            }
+            Console.WriteLine(ex.Message);
         }
+    }
 
-        [RelayCommand]
-        private void ConfirmInput()
+    [RelayCommand]
+    private void EditMapping()
+    {
+        if (FilepathIsValid)
         {
-            try
-            {
-                _newAccount.Name = NewAccountName;
-                _newAccount.BankIdentifier = NewBankIdentifier;
-                _newAccount.AccountIdentifier = NewAccountIdentifier;
-                _newAccount.Balance = decimal.Parse(NewBalance);
-
-                _newAccount = AccountService.UpdateAccount(_newAccount);
-
-                if (NewFilepath != null && NewFilepath != "")
-                {
-                    StatementProcessing.ProcessStatementFile(NewFilepath, _newAccount);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            var headers = StatementProcessing.GetCsvHeaders(NewFilepath);
+            var headerstring = string.Join("\n", headers);
+            var window = new StatementMapView();
+            window.DataContext = new StatementMapViewModel(_newAccount, headerstring);
+            window.Show();
         }
+    }
 
-        [RelayCommand]
-        private void EditMapping()
+    private async Task<IStorageFile?> DoOpenFilePickerAsync()
+    {
+        // For learning purposes, we opted to directly get the reference
+        // for StorageProvider APIs here inside the ViewModel. 
+
+        // For your real-world apps, you should follow the MVVM principles
+        // by making service classes and locating them with DI/IoC.
+
+        // See IoCFileOps project for an example of how to accomplish this.
+        if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop ||
+            desktop.MainWindow?.StorageProvider is not { } provider)
+            throw new NullReferenceException("Missing StorageProvider instance.");
+
+        var files = await provider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            if (FilepathIsValid)
-            {
-                List<string> headers = StatementProcessing.GetCsvHeaders(NewFilepath);
-                string headerstring = string.Join("\n", headers);
-                var window = new StatementMapView();
-                window.DataContext = new StatementMapViewModel(_newAccount, headerstring);
-                window.Show();
-            }
-        }
+            Title = "Open Statement File",
+            AllowMultiple = false
+        });
 
-        private async Task<IStorageFile?> DoOpenFilePickerAsync()
-        {
-            // For learning purposes, we opted to directly get the reference
-            // for StorageProvider APIs here inside the ViewModel. 
-
-            // For your real-world apps, you should follow the MVVM principles
-            // by making service classes and locating them with DI/IoC.
-
-            // See IoCFileOps project for an example of how to accomplish this.
-            if (Application.Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop ||
-                desktop.MainWindow?.StorageProvider is not { } provider)
-                throw new NullReferenceException("Missing StorageProvider instance.");
-
-            var files = await provider.OpenFilePickerAsync(new FilePickerOpenOptions()
-            {
-                Title = "Open Statement File",
-                AllowMultiple = false
-            });
-
-            return files?.Count >= 1 ? files[0] : null;
-        }
+        return files?.Count >= 1 ? files[0] : null;
     }
 }

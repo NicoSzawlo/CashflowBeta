@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CashflowBeta.Services;
 
-namespace CashflowBeta.Services
+public class CsvProcessor
 {
-    public class CsvProcessor
-    {
-    }
 }

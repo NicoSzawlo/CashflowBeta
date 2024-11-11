@@ -14,7 +14,7 @@
         <vm:AccountViewModel />
     </Design.DataContext>
     <UserControl.Resources>
-        <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
+        <local:BoolToColorConverter x:Key="BoolToColorConverter" />
     </UserControl.Resources>
 
     <StackPanel Orientation="Horizontal">
@@ -25,50 +25,50 @@
                 DockPanel.Dock="Left"
                 Width="300"
                 CornerRadius="10">
-        <StackPanel>
-            <DataGrid ItemsSource="{Binding Accounts}"
-                      SelectedItem="{Binding SelectedAccount}"
-                      GridLinesVisibility="All"
-                      BorderThickness="1"
-                      BorderBrush="Gray"
-                      AutoGenerateColumns="False"
-                      Margin="10"
-                      MinHeight="150">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Account Name" Binding="{Binding Name}" />
-                    <DataGridTextColumn Header="Balance" Binding="{Binding Balance}" />
-                </DataGrid.Columns>
-            </DataGrid>
-            <Button HorizontalAlignment="Center"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Margin="10"
-                    MinWidth="250"
-                    Height="40"
-                    Command="{Binding DeleteAccountCommand}">
-                Delete Account
-            </Button>
-            <Button HorizontalAlignment="Center"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Margin="10"
-                    MinWidth="250"
-                    Height="40"
-                    Command="{Binding EditMappingCommand}"
-                    IsEnabled="{Binding AccountSelected}">
-                Edit CSV Mapping
-            </Button>
-            <Button HorizontalAlignment="Center"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Margin="10"
-                    MinWidth="250"
-                    Height="40"
-                    Command="{Binding AddAccountCommand}">
-                Add Account
-            </Button>
-        </StackPanel>
-    </Border>
+            <StackPanel>
+                <DataGrid ItemsSource="{Binding Accounts}"
+                          SelectedItem="{Binding SelectedAccount}"
+                          GridLinesVisibility="All"
+                          BorderThickness="1"
+                          BorderBrush="Gray"
+                          AutoGenerateColumns="False"
+                          Margin="10"
+                          MinHeight="150">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Account Name" Binding="{Binding Name}" />
+                        <DataGridTextColumn Header="Balance" Binding="{Binding Balance}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button HorizontalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Margin="10"
+                        MinWidth="250"
+                        Height="40"
+                        Command="{Binding DeleteAccountCommand}">
+                    Delete Account
+                </Button>
+                <Button HorizontalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Margin="10"
+                        MinWidth="250"
+                        Height="40"
+                        Command="{Binding EditMappingCommand}"
+                        IsEnabled="{Binding AccountSelected}">
+                    Edit CSV Mapping
+                </Button>
+                <Button HorizontalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Margin="10"
+                        MinWidth="250"
+                        Height="40"
+                        Command="{Binding AddAccountCommand}">
+                    Add Account
+                </Button>
+            </StackPanel>
+        </Border>
 
         <StackPanel Margin="10"
                     VerticalAlignment="Center">
@@ -82,13 +82,13 @@
 
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Margin="0,0,5,0">Statement Filepath:</TextBlock>
-                        <TextBox Text="{Binding NewFilepath}" 
+                        <TextBox Text="{Binding NewFilepath}"
                                  Width="250"
                                  MinLines="3"
                                  TextWrapping="Wrap"
                                  BorderBrush="{Binding FilepathIsValid, 
 					                            Converter={StaticResource BoolToColorConverter}, 
-					                            Mode=Default}"/>
+					                            Mode=Default}" />
                     </StackPanel>
                     <Button HorizontalAlignment="Center"
                             Command="{Binding AddStatementCommand}"
