@@ -2,7 +2,9 @@
 using System.Linq;
 using CashflowBeta.Models;
 using CashflowBeta.Services;
+using CashflowBeta.Services.Messages;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace CashflowBeta.ViewModels;
 
@@ -14,9 +16,10 @@ public partial class TransactionsViewModel : ViewModelBase
     public TransactionsViewModel()
     {
         //Load transactions from database
-        Transactions = new ObservableCollection<CurrencyTransaction>(
-            CurrencyTransactionService.GetTransactions()
-                .OrderByDescending(item => item.DateTime).ToList());
+        //Transactions = new ObservableCollection<CurrencyTransaction>(
+        //   CurrencyTransactionService.GetTransactions()
+        //        .OrderByDescending(item => item.DateTime).ToList());
+        Transactions = new ObservableCollection<CurrencyTransaction>(WeakReferenceMessenger.Default.Send<CurrencyTransactionsRequestMessage>());
     }
 
     //Content of main datagrid

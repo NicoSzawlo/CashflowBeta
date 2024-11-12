@@ -11,7 +11,7 @@
 				 to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:BudgetsViewModel />
     </Design.DataContext>
-    <Grid>
+    <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="150" />

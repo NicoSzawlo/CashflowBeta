@@ -11,7 +11,7 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:TransactionsViewModel />
     </Design.DataContext>
-    <DockPanel Margin="20">
+    <DockPanel Margin="10">
         <DataGrid DockPanel.Dock="Left"
                   ItemsSource="{Binding Transactions}"
                   SelectedItem="{Binding SelectedTransaction}"
@@ -42,7 +42,8 @@
             <DataGrid DockPanel.Dock="Left"
                       ItemsSource="{Binding TransactionsWithPartner}"
                       GridLinesVisibility="All"
-                      BorderThickness="1" BorderBrush="Gray">
+                      BorderThickness="1" BorderBrush="Gray"
+                      Height="300">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Date" Binding="{Binding DateTime, StringFormat=d}" />
                     <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" />

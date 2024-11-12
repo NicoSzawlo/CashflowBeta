@@ -177,6 +177,7 @@ public class CurrencyTransactionService
         var isDupe = false;
         foreach (var newTransaction in newTransactions)
         {
+            isDupe = false;
             foreach (var existingTransaction in existingTransactions.Where(t =>
                          t.TransactionPartner.ID == newTransaction.TransactionPartner.ID))
                 if (newTransaction.DateTime == existingTransaction.DateTime
@@ -185,7 +186,6 @@ public class CurrencyTransactionService
                     isDupe = true;
             if (!isDupe) uniqueTransactions.Add(newTransaction);
         }
-
         return uniqueTransactions;
     }
 }

@@ -18,8 +18,6 @@ public class NetworthService
                 context.NetworthTrend
                     .Where(trendpoint => trendpoint.Account == null));
         }
-
-        ;
         return networthTrend;
     }
 
