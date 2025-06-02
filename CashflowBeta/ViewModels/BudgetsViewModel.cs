@@ -17,40 +17,55 @@ public partial class BudgetsViewModel : ViewModelBase
 
     [ObservableProperty] private TransactionPartner _selectedPartner;
 
-    public BudgetsViewModel()
+    private readonly AppDataStore _appDataStore;
+    private readonly BudgetService _budgetService;
+    private readonly CurrencyTransactionService _currencyTransactionService;
+    private readonly TransactionPartnerService _transactionPartnerService;
+
+    public BudgetsViewModel(
+        AppDataStore appDataStore,
+        BudgetService budgetService,
+        CurrencyTransactionService currencyTransactionService,
+        TransactionPartnerService transactionPartnerService)
     {
-        TransactionPartners = new ObservableCollection<TransactionPartner>(TransactionPartnerService.GetAllPartners());
-        Budgets = new ObservableCollection<Budget>(BudgetService.GetAllBudgets());
+        //Inject dependencies
+        _appDataStore = appDataStore;
+        _budgetService = budgetService;
+        _currencyTransactionService = currencyTransactionService;
+        _transactionPartnerService = transactionPartnerService;
+
+        TransactionPartners = _appDataStore.TransactionPartners;
+        Budgets = _appDataStore.Budgets;
         if (Budgets.Count > 0) SelectedBudget = Budgets.First();
     }
 
-    public ObservableCollection<TransactionPartner> TransactionPartners { get; } = new();
+    public ObservableCollection<TransactionPartner> TransactionPartners { get; set; }
     public List<TransactionPartner> SelectedPartners { get; set; } = new();
     public ObservableCollection<Budget> Budgets { get; } = new();
 
     [RelayCommand]
-    private void AddNewBudget()
+    private async Task AddNewBudget()
     {
-        Budgets.Add(new Budget { Name = "New Budget", Amount = 0, Description = "This is a new Budget" });
+        Budget budget = new() { Name = "New Budget", Amount = 0, Description = "This is a new Budget" };
+        await _budgetService.UpdateBudgetAsync(budget);
     }
 
     [RelayCommand]
     private async Task SaveChanges()
     {
-        foreach (var budget in Budgets) await BudgetService.UpdateBudgetAsync(budget);
+        foreach (var budget in Budgets) await _budgetService.UpdateBudgetAsync(budget);
     }
 
     [RelayCommand]
     private async Task ApplyBudgetToPartner()
     {
-        foreach (var partner in SelectedPartners) partner.Budget = SelectedBudget;
-        await TransactionPartnerService.ApplyBudgetToPartnersAsync(SelectedBudget, SelectedPartners);
+        await _transactionPartnerService.ApplyBudgetToPartnersAsync(SelectedBudget, SelectedPartners);
     }
 
     [RelayCommand]
     private async Task DeleteBudget()
     {
-        await BudgetService.RemoveBudgetAsync(SelectedBudget);
+        await _budgetService.RemoveBudgetAsync(SelectedBudget);
         Budgets.Remove(SelectedBudget);
     }
 }

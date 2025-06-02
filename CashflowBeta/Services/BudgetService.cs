@@ -9,6 +9,25 @@ namespace CashflowBeta.Services;
 
 public class BudgetService
 {
+    private readonly CashflowContext _db;
+    private readonly AppDataStore _appDataStore;
+    private readonly CurrencyTransactionService _currencyTransactionService;
+    public BudgetService(
+        AppDataStore appDataStore,
+        CurrencyTransactionService currencyTransactionService,
+        CashflowContext cashflowContext)
+    {
+        _db = cashflowContext;
+        _appDataStore = appDataStore;
+        _currencyTransactionService = currencyTransactionService;
+    }
+
+    //Load all budgets from database asynchronously
+    public async Task<List<Budget>> GetAllAsync()
+    {
+        return await _db.Budgets.ToListAsync();
+    }
+
     public static List<Budget> GetAllBudgets()
     {
         List<Budget> budgets = new();
@@ -21,54 +40,57 @@ public class BudgetService
         return budgets;
     }
 
-    public static async Task UpdateBudgetAsync(Budget budget)
+    public async Task UpdateBudgetAsync(Budget budget)
     {
-        using var context = new CashflowContext();
-
+        //If ID of budget is null, add to database
         if (budget.ID == 0 || budget.ID == null) // Insert new record
         {
-            await context.Budgets.AddAsync(budget); // Use AddAsync for asynchronous insert
+            _db.Budgets.Add(budget);
+            _db.SaveChanges();
+            _appDataStore.Budgets.Add(budget);
         }
         else // Update existing record
         {
-            var existingBudget = await context.Budgets.SingleOrDefaultAsync(b => b.ID == budget.ID);
+            var existingBudget = await _db.Budgets.SingleOrDefaultAsync(b => b.ID == budget.ID);
 
             if (existingBudget != null)
             {
                 // Update the existing budget properties
                 existingBudget.Name = budget.Name;
                 existingBudget.Amount = budget.Amount;
+                //Udate the local instance
+                var local = _appDataStore.Budgets.Single(bdgt => bdgt.ID == existingBudget.ID);
+                local.Name = budget.Name;
+                local.Amount = budget.Amount;
             }
         }
-
-        await context.SaveChangesAsync(); // Use SaveChangesAsync to save changes asynchronously
+        // Use SaveChangesAsync to save changes asynchronously
+        await _db.SaveChangesAsync(); 
     }
 
-    public static async Task RemoveBudgetAsync(Budget budget)
+    public async Task RemoveBudgetAsync(Budget budget)
     {
-        using var context = new CashflowContext();
-
         // Ensure the budget object is valid and has a valid ID
         if (budget != null && budget.ID != 0)
         {
             // Retrieve the budget entity from the database using the provided ID
-            var existingBudget = await context.Budgets.SingleOrDefaultAsync(b => b.ID == budget.ID);
+            var existingBudget = await _db.Budgets.SingleOrDefaultAsync(b => b.ID == budget.ID);
 
             if (existingBudget != null)
             {
                 // Remove the budget from the context
-                context.Budgets.Remove(existingBudget);
-
+                _db.Budgets.Remove(existingBudget);
+                _appDataStore.Budgets.Remove(existingBudget);
                 // Save changes to the database
-                await context.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
         }
     }
 
-    public static List<Budget> CalculateBudgetPerMonth(DateTimeOffset month)
+    public List<Budget> CalculateBudgetPerMonth(DateTimeOffset month)
     {
-        var transactions =
-            CurrencyTransactionService.GetTransactions(GetFirstDayOfMonth(month), GetLastDayOfMonth(month));
+        var transactions = _appDataStore.CurrencyTransactions.Where(t => t.DateTime >= GetFirstDayOfMonth(month))
+                .Where(t => t.DateTime <= GetLastDayOfMonth(month));
         var budgets = GetAllBudgets();
         foreach (var budget in budgets)
         foreach (var transaction in transactions.Where(t => t.Budget?.ID == budget.ID))
@@ -80,10 +102,10 @@ public class BudgetService
         return budgets;
     }
 
-    public static List<Budget> CalculateIncomeExpensePerMonth(DateTimeOffset month)
+    public List<Budget> CalculateIncomeExpensePerMonth(DateTimeOffset month)
     {
-        var transactions =
-            CurrencyTransactionService.GetTransactions(GetFirstDayOfMonth(month), GetLastDayOfMonth(month));
+        var transactions = _appDataStore.CurrencyTransactions.Where(t => t.DateTime >= GetFirstDayOfMonth(month))
+                .Where(t => t.DateTime <= GetLastDayOfMonth(month));
         var io = new List<Budget>
         {
             new()

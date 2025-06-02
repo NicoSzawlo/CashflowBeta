@@ -13,8 +13,12 @@ public partial class HomeViewModel : ViewModelBase
 {
     [ObservableProperty] private DateTimeOffset _budgetMonth;
 
-    public HomeViewModel()
+    private readonly AppDataStore _appDataStore;
+    private readonly BudgetService _budgetService;
+    public HomeViewModel(AppDataStore appDataStore, BudgetService budgetService)
     {
+        _appDataStore = appDataStore;
+        _budgetService = budgetService;
         //NetworthService.AddNetworth();
         //BudgetMonth = new DateTimeOffset(new DateTime(2024, 1, 1, 0, 0, 0));
     }
@@ -43,7 +47,7 @@ public partial class HomeViewModel : ViewModelBase
     }
 
 
-    public static void RequestUpdate(DateTimeOffset month)
+    public void RequestUpdate(DateTimeOffset month)
     {
         UpdateNetworthChart();
         UpdateBudgetGraph(month);
@@ -54,21 +58,21 @@ public partial class HomeViewModel : ViewModelBase
     {
         List<List<Networth>> networthTrends = [NetworthService.GetNetworthTrend()];
 
-        var accounts = AccountService.GetAllAccounts();
-        foreach (var acc in accounts) networthTrends.Add(NetworthService.GetNetworthTrend(acc));
+        //var accounts = AccountService.GetAllAccounts();
+        //foreach (var acc in accounts) networthTrends.Add(NetworthService.GetNetworthTrend(acc));
 
         WeakReferenceMessenger.Default.Send(new NetworthTrendsLoadedMessage(networthTrends));
     }
 
-    private static void UpdateBudgetGraph(DateTimeOffset month)
+    private void UpdateBudgetGraph(DateTimeOffset month)
     {
-        var budgets = BudgetService.CalculateBudgetPerMonth(month);
+        var budgets = _budgetService.CalculateBudgetPerMonth(month);
         WeakReferenceMessenger.Default.Send(new BudgetGraphLoadedMessage(budgets));
     }
 
-    private static void UpdateInOutGraph(DateTimeOffset month)
+    private void UpdateInOutGraph(DateTimeOffset month)
     {
-        var budgets = BudgetService.CalculateIncomeExpensePerMonth(month);
+        var budgets = _budgetService.CalculateIncomeExpensePerMonth(month);
         WeakReferenceMessenger.Default.Send(new InOutGraphLoadedMessage(budgets));
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CashflowBeta.Models;
 
-public class TransactionPartner
+public partial class TransactionPartner : ObservableObject
 {
     public int ID { get; set; }
     public string Name { get; set; }
@@ -11,8 +13,9 @@ public class TransactionPartner
     public string Bankcode { get; set; }
     public virtual ICollection<CurrencyTransaction> Transactions { get; set; }
 
-    public virtual Budget? Budget { get; set; }
-
+    [ObservableProperty]
+    private Budget? budget;
+    
     // Navigation property for the parent
     public TransactionPartner? ParentPartner { get; set; }
 

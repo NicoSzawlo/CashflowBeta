@@ -49,11 +49,16 @@ namespace CashflowBeta.Services
                 //If currency transaction present load respective additional data
                 if (_appDataStore.CurrencyTransactions.Count > 0)
                 {
-                    //Load partners, budgets and networth
+                    //Load transaction partners
                     var transactionPartners = await _transactionPartnerService.GetAllAsync();
                     if (transactionPartners.Count > 0)
                         foreach (var tp in transactionPartners)
                             _appDataStore.TransactionPartners.Add(tp);
+                    //Load Budgets
+                    var budgets = await _budgetService.GetAllAsync();
+                    if (budgets.Count > 0)
+                        foreach (var bdgt in budgets)
+                            _appDataStore.Budgets.Add(bdgt);
                 }
             }
             DataInitialized = true;

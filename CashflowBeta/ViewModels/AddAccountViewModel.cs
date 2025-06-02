@@ -29,9 +29,13 @@ public partial class AddAccountViewModel : ViewModelBase
 
     [ObservableProperty] private string? _newFilepath;
 
-    public AddAccountViewModel()
+    private readonly AccountService _accountService;
+    private readonly StatementProcessingService _statementProcessing;
+    public AddAccountViewModel(AccountService accountService, StatementProcessingService statementProcessing)
     {
-        _newAccount = AccountService.AddNewAccount(_newAccount);
+        _accountService = accountService;
+        _statementProcessing = statementProcessing;
+        _newAccount = _accountService.AddNewAccount(_newAccount);
 
         NewAccountName = _newAccount.Name;
         NewBankIdentifier = _newAccount.BankIdentifier;
@@ -77,10 +81,10 @@ public partial class AddAccountViewModel : ViewModelBase
             _newAccount.AccountIdentifier = NewAccountIdentifier;
             _newAccount.Balance = decimal.Parse(NewBalance);
 
-            _newAccount = AccountService.UpdateAccount(_newAccount);
+            _newAccount = _accountService.UpdateAccount(_newAccount);
 
             if (NewFilepath != null && NewFilepath != "")
-                StatementProcessing.ProcessStatementFile(NewFilepath, _newAccount);
+                _statementProcessing.ProcessStatementFile(NewFilepath, _newAccount);
         }
         catch (Exception ex)
         {
@@ -93,7 +97,7 @@ public partial class AddAccountViewModel : ViewModelBase
     {
         if (FilepathIsValid)
         {
-            var headers = StatementProcessing.GetCsvHeaders(NewFilepath);
+            var headers = StatementProcessingService.GetCsvHeaders(NewFilepath);
             var headerstring = string.Join("\n", headers);
             var window = new StatementMapView();
             window.DataContext = new StatementMapViewModel(_newAccount, headerstring);

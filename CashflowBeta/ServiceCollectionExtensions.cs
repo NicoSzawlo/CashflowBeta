@@ -1,4 +1,5 @@
 using CashflowBeta.Services;
+using CashflowBeta.Services.StatementProcessing;
 using CashflowBeta.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +18,7 @@ public static class ServiceCollectionExtensions
         collection.AddScoped<BudgetService>();
         collection.AddScoped<NetworthService>();
         collection.AddScoped<TransactionPartnerService>();
+        collection.AddScoped<StatementProcessingService>();
         //Add Viewmodels
         collection.AddTransient<MainWindowViewModel>();
         collection.AddTransient<TransactionsViewModel>();
@@ -26,5 +28,6 @@ public static class ServiceCollectionExtensions
         collection.AddTransient<PartnersViewModel>();
         collection.AddTransient<AddAccountViewModel>();
         collection.AddTransient<StatementMapViewModel>();
+        collection.AddTransient<AddAccountViewModel>();
     }
 }

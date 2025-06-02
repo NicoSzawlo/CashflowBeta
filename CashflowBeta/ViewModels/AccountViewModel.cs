@@ -22,9 +22,13 @@ public partial class AccountViewModel : ViewModelBase
     //Selected account in datagrid
     [ObservableProperty] private Account? _selectedAccount;
     private readonly AppDataStore _appDataStore;
-    public AccountViewModel(AppDataStore appDataStore)
+    private readonly AccountService _accountService;
+    private readonly StatementProcessingService _statementProcessing;
+    public AccountViewModel(AppDataStore appDataStore, AccountService accountService, StatementProcessingService statementProcessing)
     {
         _appDataStore = appDataStore;
+        _accountService = accountService;
+        _statementProcessing = statementProcessing;
         //Load Accounts from database
         Accounts = appDataStore.Accounts;
         //Register request message for selected account
@@ -58,7 +62,7 @@ public partial class AccountViewModel : ViewModelBase
     [RelayCommand]
     private void AddAccount()
     {
-        AddAccountViewModel addAccountViewModel = new();
+        AddAccountViewModel addAccountViewModel = new AddAccountViewModel(_accountService, _statementProcessing);
         var window = new AddAccountView();
         window.DataContext = addAccountViewModel;
         window.Show();
@@ -71,7 +75,7 @@ public partial class AccountViewModel : ViewModelBase
 
         if (FilepathIsValid)
         {
-            var headers = StatementProcessing.GetCsvHeaders(NewFilepath);
+            var headers = StatementProcessingService.GetCsvHeaders(NewFilepath);
             headerstring = string.Join("\n", headers);
         }
 
@@ -83,7 +87,7 @@ public partial class AccountViewModel : ViewModelBase
     [RelayCommand]
     private void AddStatement()
     {
-        StatementProcessing.ProcessStatementFile(NewFilepath, SelectedAccount);
+        _statementProcessing.ProcessStatementFile(NewFilepath, SelectedAccount);
     }
 
     [RelayCommand]
@@ -92,6 +96,6 @@ public partial class AccountViewModel : ViewModelBase
         Account? selected = new();
         selected = SelectedAccount;
         Accounts.Remove(selected);
-        await AccountService.DeleteAccount(selected);
+        await _accountService.DeleteAccount(selected);
     }
 }

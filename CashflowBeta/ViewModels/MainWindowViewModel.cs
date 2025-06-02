@@ -29,7 +29,6 @@ public partial class MainWindowViewModel : ViewModelBase
         var instance = Activator.CreateInstance(typeof(ApplicationLoadingViewModel));
         CurrentView = (ViewModelBase)instance;
         Task.Run(async () => LoadApplicationData());
-        RegisterMessages();
 
     }
 
@@ -77,16 +76,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var instance = Activator.CreateInstance(typeof(AccountViewModel));
         CurrentView = (ViewModelBase)instance;
     }
-
-    private void RegisterMessages()
-    {
-        //Register transaction request message
-        WeakReferenceMessenger.Default.Register<MainWindowViewModel, CurrencyTransactionsRequestMessage>(this, (r, m) =>
-        {
-            m.Reply(r.Transactions);
-        });
-    }
-
+    
     //Change view from navigation menu
     partial void OnSelectedMenuItemChanged(MainMenuItemTemplate? value)
     {

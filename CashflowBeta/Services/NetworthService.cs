@@ -8,6 +8,16 @@ namespace CashflowBeta.Services;
 
 public class NetworthService
 {
+    private readonly AccountService _accountService;
+    private readonly CurrencyTransactionService _currencyTransactionService;
+    private readonly AppDataStore _appDataStore;
+
+    public NetworthService(AppDataStore appDataStore, AccountService acccountService, CurrencyTransactionService currencyTransactionService)
+    {
+        _accountService = acccountService;
+        _currencyTransactionService = currencyTransactionService;
+        _appDataStore = appDataStore;
+    }
     //Load total networth trend from database
     public static List<Networth> GetNetworthTrend()
     {
@@ -55,7 +65,7 @@ public class NetworthService
     }
 
     //Method to update account specific networth
-    public static void AddNetworth(Account? account)
+    public void AddNetworth(Account? account)
     {
         var networthTrend = CalculateNetworth(account);
         //Save data to database
@@ -75,59 +85,60 @@ public class NetworthService
     //Method to recalculate complete networth table
     public static void RecalculateNetworthTrends()
     {
-        var accounts = AccountService.GetAllAccounts();
+        //var accounts = AccountService.GetAllAccounts();
         AddNetworth();
-        foreach (var acc in accounts) AddNetworth(acc);
+        //foreach (var acc in accounts) AddNetworth(acc);
     }
 
     //Calculate and return networth list for all transaction currently in database
     public static List<Networth> CalculateNetworth()
     {
         //Get all transactions in database and generate Datelist for all available transactions
-        var transactions = CurrencyTransactionService.GetTransactions();
-        var dates = GetDateListFromTransactionList(transactions);
+        // var transactions = CurrencyTransactionService.GetTransactions();
+        // var dates = GetDateListFromTransactionList(transactions);
 
-        //Initialize networthtrend and calculate sum of transactions per day
+        // //Initialize networthtrend and calculate sum of transactions per day
         var networthTrend = new List<Networth>();
-        decimal tempdecimal = 0;
-        foreach (var date in dates)
-        {
-            tempdecimal = 0;
-            foreach (var transaction in transactions.Where(item => item.DateTime == date))
-                tempdecimal += transaction.Amount;
-            networthTrend.Add(new Networth { DateTime = date, Capital = tempdecimal });
-        }
+        // decimal tempdecimal = 0;
+        // foreach (var date in dates)
+        // {
+        //     tempdecimal = 0;
+        //     foreach (var transaction in transactions.Where(item => item.DateTime == date))
+        //         tempdecimal += transaction.Amount;
+        //     networthTrend.Add(new Networth { DateTime = date, Capital = tempdecimal });
+        // }
 
-        //Get total account balance
-        var balance = AccountService.GetTotalBalance();
-        //Order list and Set current total balance on latest day
-        networthTrend = networthTrend.OrderByDescending(netitem => netitem.DateTime).ToList();
-        networthTrend[0].Capital = balance;
+        // //Get total account balance
+        // //var balance = _accountService.GetTotalBalance();
+        // //Order list and Set current total balance on latest day
+        // networthTrend = networthTrend.OrderByDescending(netitem => netitem.DateTime).ToList();
+        // //networthTrend[0].Capital = balance;
 
-        //Go through each day beginning from the latest+1 and calculate networth on that day
-        //by subtracting the transaction from a day from its total networth
-        for (var i = 1; i < networthTrend.Count; i++)
-            networthTrend[i].Capital = networthTrend[i - 1].Capital - networthTrend[i].Capital;
+        // //Go through each day beginning from the latest+1 and calculate networth on that day
+        // //by subtracting the transaction from a day from its total networth
+        // for (var i = 1; i < networthTrend.Count; i++)
+        //     networthTrend[i].Capital = networthTrend[i - 1].Capital - networthTrend[i].Capital;
         return networthTrend;
     }
 
     //Calculate and return networth list for all transaction of a specific account 
-    public static List<Networth> CalculateNetworth(Account? account)
+    public List<Networth> CalculateNetworth(Account? account)
     {
         //Get all transactions in database and generate Datelist for all available transactions
-        var transactions = CurrencyTransactionService.GetTransactions(account);
-        var dates = GetDateListFromTransactionList(transactions);
+        var transactions = _appDataStore.CurrencyTransactions.Where(t => t.Account == account);
+        
+        //var dates = GetDateListFromTransactionList(transactions);
 
         //Initialize networthtrend and calculate sum of transactions per day
         var networthTrend = new List<Networth>();
         decimal tempdecimal = 0;
-        foreach (var date in dates)
-        {
-            tempdecimal = 0;
-            foreach (var transaction in transactions.Where(item => item.DateTime == date))
-                tempdecimal += transaction.Amount;
-            networthTrend.Add(new Networth { DateTime = date, Capital = tempdecimal, Account = account });
-        }
+        // foreach (var date in dates)
+        // {
+        //     tempdecimal = 0;
+        //     foreach (var transaction in transactions.Where(item => item.DateTime == date))
+        //         tempdecimal += transaction.Amount;
+        //     networthTrend.Add(new Networth { DateTime = date, Capital = tempdecimal, Account = account });
+        // }
 
         //Get total account balance
         var balance = account.Balance;

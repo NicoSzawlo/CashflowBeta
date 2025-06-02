@@ -15,59 +15,47 @@ public class AccountService
         _db = db;
         _appDataStore = appDataStore;
     }
-    //Load all accounts from database
-    public static List<Account?> GetAllAccounts()
-    {
-        List<Account?> accounts;
-        using (var context = new CashflowContext())
-        {
-            accounts = new List<Account?>(context.Accounts);
-        }
-
-        return accounts;
-    }
-    //Load all accounts from database
+    //Load all accounts from database asynchronously
     public async Task<List<Account>> GetAllAsync()
     {
         return await _db.Accounts.ToListAsync();
     }
+
     // Method to calculate and return the total balance of all accounts
-    public static decimal GetTotalBalance()
+    public decimal GetTotalBalance()
     {
         // Initialize a variable to store the total balance
         decimal balance = 0;
 
         // Get a list of all accounts
-        var accounts = GetAllAccounts();
+        //var accounts = GetAllAccounts();
 
         // Loop through each account and add its balance to the total
-        foreach (var account in accounts) balance += account.Balance;
+        //foreach (var account in accounts) balance += account.Balance;
 
         // Return the total balance
         return balance;
     }
 
     //Add account to database
-    public static Account? AddNewAccount(Account? acc)
+    public Account AddNewAccount(Account acc)
     {
-        using var context = new CashflowContext();
-        context.Accounts.Add(acc);
-        context.SaveChanges();
+        _db.Accounts.Add(acc);
+        _db.SaveChanges();
 
         return acc;
     }
 
     //Update account
-    public static Account? UpdateAccount(Account? account)
+    public Account UpdateAccount(Account account)
     {
-        using var context = new CashflowContext();
         if (account.ID == 0 || account.ID == null) // Insert new record
         {
-            context.Accounts.Add(account); // Use AddAsync for asynchronous insert
+            AddNewAccount(account);
         }
         else // Update existing record
         {
-            var existingAccount = context.Accounts.SingleOrDefault(a => a.ID == account.ID);
+            var existingAccount = _db.Accounts.SingleOrDefault(a => a.ID == account.ID);
 
             if (existingAccount != null)
             {
@@ -79,22 +67,21 @@ public class AccountService
             }
         }
 
-        context.SaveChanges();
+        _db.SaveChanges();
         return account;
     }
 
-    public static async Task DeleteAccount(Account? account)
+    public async Task DeleteAccount(Account? account)
     {
-        using var context = new CashflowContext();
         //Load account instance and all related transactions
-        var acc = context.Accounts.SingleOrDefault(a => a.ID == account.ID);
-        var transactions = context.CurrencyTransactions.Where(t => t.Account == acc);
-        var trends = context.NetworthTrend.Where(n => n.Account == acc);
+        var acc = _db.Accounts.SingleOrDefault(a => a.ID == account.ID);
+        var transactions = _db.CurrencyTransactions.Where(t => t.Account == acc);
+        var trends = _db.NetworthTrend.Where(n => n.Account == acc);
         //Remove all transactions and accounts
-        context.CurrencyTransactions.RemoveRange(transactions);
-        context.NetworthTrend.RemoveRange(trends);
-        context.Accounts.Remove(acc);
+        _db.CurrencyTransactions.RemoveRange(transactions);
+        _db.NetworthTrend.RemoveRange(trends);
+        _db.Accounts.Remove(acc);
         //Save changes
-        await context.SaveChangesAsync();
+        await _db.SaveChangesAsync();
     }
 }

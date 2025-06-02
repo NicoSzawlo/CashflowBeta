@@ -11,6 +11,7 @@ public class CurrencyTransactionService
 {
     private readonly CashflowContext _db;
     private readonly AppDataStore _appDataStore;
+    
     public CurrencyTransactionService(CashflowContext db, AppDataStore appDataStore)
     {
         _db = db;
@@ -23,7 +24,7 @@ public class CurrencyTransactionService
     }
 
     //Add currency transactions to database
-    public static void AddCurrencyTransactions(List<CurrencyTransaction> transactions, Account? account)
+    public async Task AddCurrencyTransactions(List<CurrencyTransaction> transactions, Account? account)
     {
         //Add account
         transactions = AddAccountToTransactions(transactions, account);
@@ -38,46 +39,10 @@ public class CurrencyTransactionService
         transactions = FillNullWithEmptyString(transactions);
 
         //Save data to database
-        using var context = new CashflowContext();
-        context.Attach(account);
-        foreach (var transaction in transactions) context.Attach(transaction.TransactionPartner);
-        context.AddRange(transactions);
-        context.SaveChanges();
-    }
-
-    //Get all transactions from database
-    public static List<CurrencyTransaction> GetTransactions()
-    {
-        List<CurrencyTransaction> transactions = new();
-        //Load Accounts from database
-        using (var context = new CashflowContext())
-        {
-            transactions = new List<CurrencyTransaction>(context.CurrencyTransactions
-                .Include(t => t.TransactionPartner)
-                .Include(t => t.TransactionPartner.ParentPartner)
-                .Include(t => t.Account)
-                .Include(t => t.Budget));
-        }
-
-        return transactions;
-    }
-
-    //Get all transactions from database for a specific account
-    public static List<CurrencyTransaction> GetTransactions(Account? account)
-    {
-        List<CurrencyTransaction> transactions = new();
-        //Load Accounts from database
-        using (var context = new CashflowContext())
-        {
-            transactions = new List<CurrencyTransaction>(context.CurrencyTransactions
-                .Where(t => t.Account.ID == account.ID)
-                .Include(t => t.TransactionPartner)
-                .Include(t => t.TransactionPartner.ParentPartner)
-                .Include(t => t.Account)
-                .Include(t => t.Budget));
-        }
-
-        return transactions;
+        _db.Attach(account);
+        foreach (var transaction in transactions) _db.Attach(transaction.TransactionPartner);
+        _db.AddRange(transactions);
+        _db.SaveChanges();
     }
 
     //Get all transactions between 2 dates
@@ -115,16 +80,21 @@ public class CurrencyTransactionService
         return transaction;
     }
 
-    //Update budgets for transaction with specific partner
-    public static async Task UpdateBudgets(TransactionPartner partner)
+    
+    //Set the budget for each transaction with partner
+    public async Task UpdateBudgets(TransactionPartner partner)
     {
-        using var context = new CashflowContext();
         List<CurrencyTransaction> transactions = new(
-            context.CurrencyTransactions
+            _db.CurrencyTransactions
                 .Where(t => t.TransactionPartner == partner));
         //Update budget for each transaction with specific partner
-        foreach (var transaction in transactions) transaction.Budget = partner.Budget;
-        await context.SaveChangesAsync();
+        foreach (var transaction in transactions)
+        {
+            transaction.Budget = partner.Budget;
+            var local = _appDataStore.CurrencyTransactions.Single(t => t.ID == transaction.ID);
+            local.Budget = partner.Budget;
+        } 
+        await _db.SaveChangesAsync();
     }
 
     //Method to match the partners that are inside the database with the partners in the transaction list
@@ -161,7 +131,7 @@ public class CurrencyTransactionService
     }
 
     //Method to add account to transactionslist
-    private static List<CurrencyTransaction> AddAccountToTransactions(List<CurrencyTransaction> transactions,
+    private List<CurrencyTransaction> AddAccountToTransactions(List<CurrencyTransaction> transactions,
         Account? account)
     {
         foreach (var transaction in transactions) transaction.Account = account;
@@ -182,11 +152,12 @@ public class CurrencyTransactionService
     }
 
     //Method to remove dupes from transactionlist
-    private static List<CurrencyTransaction> RemoveDupes(List<CurrencyTransaction> newTransactions, Account? account)
+    private List<CurrencyTransaction> RemoveDupes(List<CurrencyTransaction> newTransactions, Account? account)
     {
         using var context = new CashflowContext();
-        var existingTransactions = GetTransactions(account);
-        var uniqueTransactions = new List<CurrencyTransaction>();
+        //var existingTransactions = GetTransactions(account);
+        var existingTransactions = _appDataStore.CurrencyTransactions.Where(t => t.Account == account);
+       var uniqueTransactions = new List<CurrencyTransaction>();
         var isDupe = false;
         foreach (var newTransaction in newTransactions)
         {

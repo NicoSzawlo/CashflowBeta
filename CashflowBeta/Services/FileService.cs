@@ -95,7 +95,6 @@ public class FileService
     {
         var path = GenerateFilePath(accId);
         var jsonString = JsonSerializer.Serialize(map);
-        GenerateFilePath(accId);
         if (File.Exists(path))
             File.WriteAllText(path, jsonString);
         else

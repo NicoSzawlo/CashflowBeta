@@ -12,18 +12,15 @@ public partial class TransactionsViewModel : ViewModelBase
 {
     //Selected transcation in main datagrid of view
     [ObservableProperty] private CurrencyTransaction _selectedTransaction;
-
-    public TransactionsViewModel()
+    private readonly AppDataStore _appDataStore;
+    public TransactionsViewModel(AppDataStore appDataStore)
     {
-        //Load transactions from database
-        //Transactions = new ObservableCollection<CurrencyTransaction>(
-        //   CurrencyTransactionService.GetTransactions()
-        //        .OrderByDescending(item => item.DateTime).ToList());
-        Transactions = new ObservableCollection<CurrencyTransaction>(WeakReferenceMessenger.Default.Send<CurrencyTransactionsRequestMessage>());
+        _appDataStore = appDataStore;
+        Transactions = _appDataStore.CurrencyTransactions;
     }
 
     //Content of main datagrid
-    public ObservableCollection<CurrencyTransaction> Transactions { get; } = new();
+    public ObservableCollection<CurrencyTransaction> Transactions { get; }
 
     //Content of small datagrid showing all transactions with currently selected partner
     public ObservableCollection<CurrencyTransaction> TransactionsWithPartner { get; } = new();

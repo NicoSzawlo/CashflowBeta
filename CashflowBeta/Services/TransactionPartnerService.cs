@@ -12,10 +12,15 @@ public class TransactionPartnerService
 
     private readonly CashflowContext _db;
     private readonly AppDataStore _appDataStore;
-    public TransactionPartnerService(CashflowContext db, AppDataStore appDataStore)
+    private readonly CurrencyTransactionService _currencyTransactionService;
+    public TransactionPartnerService(
+        CashflowContext db,
+        AppDataStore appDataStore,
+        CurrencyTransactionService currencyTransactionService)
     {
         _db = db;
         _appDataStore = appDataStore;
+        _currencyTransactionService = currencyTransactionService;
     }
 
     //Load all transactionpartner from database
@@ -121,18 +126,21 @@ public class TransactionPartnerService
     }
 
     //Set budget to partners
-    public static async Task ApplyBudgetToPartnersAsync(Budget budget, List<TransactionPartner> partners)
+    public async Task ApplyBudgetToPartnersAsync(Budget budget, List<TransactionPartner> partners)
     {
-        using var context = new CashflowContext();
         foreach (var partner in partners)
         {
-            var existingPartner = await context.TransactionsPartners.SingleOrDefaultAsync(p => p.ID == partner.ID);
+            var existingPartner = await _db.TransactionsPartners.SingleOrDefaultAsync(p => p.ID == partner.ID);
 
             if (existingPartner != null)
+            {
                 // Update the existing budget properties
                 existingPartner.Budget = budget;
-            await context.SaveChangesAsync();
-            await CurrencyTransactionService.UpdateBudgets(partner);
+                var local = _appDataStore.TransactionPartners.Single(t => t.ID == existingPartner.ID);
+                local.Budget = budget;
+            }
+            await _db.SaveChangesAsync();
+            await _currencyTransactionService.UpdateBudgets(partner);
         }
     }
 

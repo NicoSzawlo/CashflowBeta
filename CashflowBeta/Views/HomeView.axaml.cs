@@ -49,8 +49,8 @@ public partial class HomeView : UserControl
     private void HomeView_DataContextChanged(object? sender, EventArgs e)
     {
         // Access the ViewModel from DataContext after it's set
-        if (DataContext is HomeViewModel vm)
+        //if (DataContext is HomeViewModel vm)
             // Now you can safely call the static method
-            HomeViewModel.RequestUpdate(vm.BudgetMonth);
+            //HomeViewModel.RequestUpdate(vm.BudgetMonth);
     }
 }
