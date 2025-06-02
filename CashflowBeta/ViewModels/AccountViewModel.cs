@@ -21,11 +21,12 @@ public partial class AccountViewModel : ViewModelBase
 
     //Selected account in datagrid
     [ObservableProperty] private Account? _selectedAccount;
-
-    public AccountViewModel()
+    private readonly AppDataStore _appDataStore;
+    public AccountViewModel(AppDataStore appDataStore)
     {
+        _appDataStore = appDataStore;
         //Load Accounts from database
-        Accounts = new ObservableCollection<Account?>(AccountService.GetAllAccounts());
+        Accounts = appDataStore.Accounts;
         //Register request message for selected account
         WeakReferenceMessenger.Default.Register<AccountViewModel, SelectedAccountRequestMessage>(this, (r, m) =>
         {

@@ -2,11 +2,19 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CashflowBeta.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CashflowBeta.Services;
 
 public class AccountService
 {
+    private readonly AppDataStore _appDataStore;
+    private readonly CashflowContext _db;
+    public AccountService(CashflowContext db, AppDataStore appDataStore)
+    {
+        _db = db;
+        _appDataStore = appDataStore;
+    }
     //Load all accounts from database
     public static List<Account?> GetAllAccounts()
     {
@@ -18,7 +26,11 @@ public class AccountService
 
         return accounts;
     }
-
+    //Load all accounts from database
+    public async Task<List<Account>> GetAllAsync()
+    {
+        return await _db.Accounts.ToListAsync();
+    }
     // Method to calculate and return the total balance of all accounts
     public static decimal GetTotalBalance()
     {

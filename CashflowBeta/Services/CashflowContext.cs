@@ -6,7 +6,7 @@ namespace CashflowBeta.Services;
 public class CashflowContext : DbContext
 {
     private readonly string db = "cashflow";
-    private readonly string pw = "root";
+    private readonly string pw = "280998";
     private readonly string server = "localhost";
     private readonly string user = "root";
 

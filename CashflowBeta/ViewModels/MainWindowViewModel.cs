@@ -9,6 +9,7 @@ using CashflowBeta.ViewModels.Templates;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CashflowBeta.ViewModels;
 
@@ -20,15 +21,16 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty] private bool _isPaneOpen;
 
     [ObservableProperty] public MainMenuItemTemplate? _selectedMenuItem;
+    private readonly AppStatusService _appStatusService;
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(AppStatusService appStatusService)
     {
-        DataLoaded = false;
+        _appStatusService = appStatusService;
         var instance = Activator.CreateInstance(typeof(ApplicationLoadingViewModel));
         CurrentView = (ViewModelBase)instance;
         Task.Run(async () => LoadApplicationData());
         RegisterMessages();
-        
+
     }
 
     private List<CurrencyTransaction> Transactions { get; set; }
@@ -46,19 +48,33 @@ public partial class MainWindowViewModel : ViewModelBase
         new MainMenuItemTemplate(typeof(PartnersViewModel))
     };
 
+    private AppStatusService AppStatus { get; }
+
     private async Task LoadApplicationData()
     {
-        //Load all relevant data
-        Transactions = CurrencyTransactionService.GetTransactions();
-        Partners = TransactionPartnerService.GetAllPartners();
-        Accounts = AccountService.GetAllAccounts();
-        NetworthTrends = NetworthService.GetNetworthTrend();
-        Budgets = BudgetService.GetAllBudgets();
+        /* //Load all relevant data
+        if (AppStatus.HasAnyAccount)
+        {
+            Accounts = AccountService.GetAllAccounts();
+            if (AppStatus.HasAnyTransaction)
+            { 
+                Transactions = CurrencyTransactionService.GetTransactions();
+                Partners = TransactionPartnerService.GetAllPartners();
+            }
+        }
+        if (AppStatus.HasAnyNetworthtrend)
+        {
+            NetworthTrends = NetworthService.GetNetworthTrend();    
+        }
+        if (AppStatus.HasAnyBudgets)
+        {
+            Budgets = BudgetService.GetAllBudgets();   
+        }
         //Set data loaded signal
-        DataLoaded = true;
+        DataLoaded = true; */
 
         //Change view to home view
-        var instance = Activator.CreateInstance(typeof(HomeViewModel));
+        var instance = Activator.CreateInstance(typeof(AccountViewModel));
         CurrentView = (ViewModelBase)instance;
     }
 
@@ -74,19 +90,18 @@ public partial class MainWindowViewModel : ViewModelBase
     //Change view from navigation menu
     partial void OnSelectedMenuItemChanged(MainMenuItemTemplate? value)
     {
-        if (DataLoaded)
-        {
-            if (value == null) return;
-            var instance = Activator.CreateInstance(value.ModelType);
-            if (instance == null) return;
-            CurrentView = (ViewModelBase)instance;
-        }
-        else
-        {
-            var instance = Activator.CreateInstance(typeof(ApplicationLoadingViewModel));
-            CurrentView = (ViewModelBase)instance;
-            SelectedMenuItem = null;
-        }
+        // if (!DataLoaded)
+        // {
+        //     CurrentView = App.Services.GetRequiredService<ApplicationLoadingViewModel>();
+        //     SelectedMenuItem = null;
+        //     return;
+        // }
+
+        if (value?.ModelType == null)
+            return;
+
+        var instance = App.Services.GetRequiredService(value.ModelType);
+        CurrentView = (ViewModelBase)instance;
     }
 
     //Trigggers navigation menu pane

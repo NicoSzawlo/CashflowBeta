@@ -15,8 +15,8 @@ public partial class HomeViewModel : ViewModelBase
 
     public HomeViewModel()
     {
-        NetworthService.AddNetworth();
-        BudgetMonth = new DateTimeOffset(new DateTime(2024, 1, 1, 0, 0, 0));
+        //NetworthService.AddNetworth();
+        //BudgetMonth = new DateTimeOffset(new DateTime(2024, 1, 1, 0, 0, 0));
     }
 
     [RelayCommand]

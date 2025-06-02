@@ -9,6 +9,19 @@ namespace CashflowBeta.Services;
 
 public class CurrencyTransactionService
 {
+    private readonly CashflowContext _db;
+    private readonly AppDataStore _appDataStore;
+    public CurrencyTransactionService(CashflowContext db, AppDataStore appDataStore)
+    {
+        _db = db;
+        _appDataStore = appDataStore;
+    }
+    //Load all currencytransactions from database
+    public async Task<List<CurrencyTransaction>> GetAllAsync()
+    {
+        return await _db.CurrencyTransactions.ToListAsync();
+    }
+
     //Add currency transactions to database
     public static void AddCurrencyTransactions(List<CurrencyTransaction> transactions, Account? account)
     {

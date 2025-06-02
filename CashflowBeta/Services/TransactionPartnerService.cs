@@ -9,6 +9,20 @@ namespace CashflowBeta.Services;
 
 public class TransactionPartnerService
 {
+
+    private readonly CashflowContext _db;
+    private readonly AppDataStore _appDataStore;
+    public TransactionPartnerService(CashflowContext db, AppDataStore appDataStore)
+    {
+        _db = db;
+        _appDataStore = appDataStore;
+    }
+
+    //Load all transactionpartner from database
+    public async Task<List<TransactionPartner>> GetAllAsync()
+    {
+        return await _db.TransactionsPartners.ToListAsync();
+    }
     //Sorts out distinct partners of a list of transactions
     public static List<TransactionPartner> GetDistinctPartners(IEnumerable<CurrencyTransaction> transactions)
     {
